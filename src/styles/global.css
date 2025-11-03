@@ -1,3 +1,63 @@
-@import "tailwindcss";
-@plugin "daisyui";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
+@import "tailwindcss";
+
+@theme {
+    --font-header: Outfit, serif;
+    --font-common: Roboto, sans-serif;
+}
+
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "theme";
+  default: true;
+  prefersdark: true;
+  color-scheme: "light";
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: #F5F5F5;
+  --color-base-300: #EBEBEB;
+  --color-base-content: oklch(0% 0 0);
+  --color-primary: #6C2B0C;
+  --color-primary-content: #FFFFFF;
+  --color-secondary: oklch(61.302% 0.202 261.294);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(72.772% 0.149 33.2);
+  --color-accent-content: oklch(0% 0 0);
+  --color-neutral: #000000;
+  --color-neutral-content: oklch(98.462% 0.001 247.838);
+  --color-info: oklch(72.06% 0.191 231.6);
+  --color-info-content: oklch(0% 0 0);
+  --color-success: oklch(64.8% 0.15 160);
+  --color-success-content: oklch(0% 0 0);
+  --color-warning: oklch(84.71% 0.199 83.87);
+  --color-warning-content: oklch(0% 0 0);
+  --color-error: oklch(71.76% 0.221 22.18);
+  --color-error-content: oklch(0% 0 0);
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+
+@layer base {
+    * {
+        @apply font-common text-base;
+    }
+    main {
+        @apply p-10;
+    }
+    h1 {
+        @apply font-header font-extrabold text-8xl;
+    }
+    h2 {
+        @apply font-header font-bold text-4xl;
+    }
+    h3 {
+        @apply font-header font-semibold text-3xl;
+    }
+}
