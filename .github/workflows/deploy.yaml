@@ -49,5 +49,6 @@ jobs:
                 cd /var/www/tavue/server
                 npm ci
                 npm install astro
+                npm install pocketbase
                 npm install send server-destroy
                 PORT=8070 pm2 restart tavue || PORT=8070 pm2 start entry.mjs --name tavue
