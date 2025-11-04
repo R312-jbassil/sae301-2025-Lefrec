@@ -51,4 +51,4 @@ jobs:
                 npm install astro
                 npm install pocketbase
                 npm install send server-destroy
-                PORT=8070 ASTRO_TRUST_PROXY=true NODE_ENV=production pm2 restart tavue || PORT=8070 ASTRO_TRUST_PROXY=true NODE_ENV=production pm2 start entry.mjs --name tavue
+                pm2 startOrReload /var/www/tavue/ecosystem.config.js
