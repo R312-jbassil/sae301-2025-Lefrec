@@ -1,11 +1,11 @@
 ---
-import Pocketbase from "pocketbase";
-const pb = new Pocketbase("https://tavue.pb.paolo-vincent.fr:443");
+// import Pocketbase from "pocketbase";
+// const pb = new Pocketbase("https://tavue.pb.paolo-vincent.fr:443");
 
-const cookies = Astro.cookies;
+// const cookies = Astro.cookies;
 
-pb.authStore.clear();
-cookies.delete("pb_auth", { path: "/" });
+// pb.authStore.clear();
+// cookies.delete("pb_auth", { path: "/" });
 
-return Astro.redirect("/");
+// return Astro.redirect("/");
 ---

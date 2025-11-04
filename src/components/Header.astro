@@ -22,6 +22,9 @@ if (!user && pb.authStore.isValid) {
   await pb.collection("users").authRefresh();
   user = pb.authStore.record;
 }
+
+console.log(token);
+console.log(user);
 ---
 
 <header

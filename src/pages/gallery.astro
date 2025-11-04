@@ -5,13 +5,17 @@ import Layout from "../layouts/Layout.astro";
 // import Pocketbase from "pocketbase";
 // const pb = new Pocketbase("https://tavue.pb.paolo-vincent.fr:443");
 
-// const token = Astro.cookies.get("pb_auth")?.value;
+// let token;
+
+// if (Astro.cookies.has("pb_auth")) {
+//   token = Astro.cookies.get("pb_auth")?.value;
+// }
 
 // if (token) {
 //   pb.authStore.save(token);
 // }
 
-// let user = pb.authStore.record;
+// let user;
 
 // if (!user && pb.authStore.isValid) {
 //   await pb.collection("users").authRefresh();
