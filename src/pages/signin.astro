@@ -88,56 +88,65 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script type="module">
-  const { pb } = await import("/lib/pb.js");
-
   const msg = document.getElementById("msg");
-  let message;
-
   const form = document.getElementById("form");
+  const googleBtn = document.getElementById("googlelogin");
+
   form.onsubmit = async (e) => {
     e.preventDefault();
-    const prenom = form.prenom.value;
-    const nom = form.nom.value;
-    const email = form.email.value;
+    msg.innerHTML = "";
+
     const password = form.password.value;
     const passwordConfirm = form.passwordConfirm.value;
-    if (!(password === passwordConfirm)) {
-      message = "Votre mot de passe n'a pas pu être confirmé";
-      msg.innerHTML = message;
+
+    if (password !== passwordConfirm) {
+      msg.innerHTML = "Votre mot de passe n'a pas pu être confirmé";
       return;
     }
-    message = await createUser({
-      prenom,
-      nom,
-      email,
-      password,
-      passwordConfirm,
-    });
-    msg.innerHTML = message;
-  };
 
-  //auth pocketbase
-  async function createUser(data) {
     try {
-      await pb.collection("users").create({
-        Prenom: data.prenom,
-        Nom: data.nom,
-        email: data.email,
-        password: data.password,
-        passwordConfirm: data.passwordConfirm,
+      const resp = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "signup",
+          prenom: form.prenom.value,
+          nom: form.nom.value,
+          email: form.email.value,
+          password,
+          passwordConfirm,
+        }),
       });
-      await pb.collection("users").authWithPassword(data.email, data.password);
-      location.href = "/";
-      return "Ton compte a bien été créé";
+
+      const data = await resp.json();
+      if (data.ok) {
+        location.href = "/";
+      } else {
+        msg.innerHTML = data.message || "Ton compte n'a pas pu être créé";
+      }
     } catch (error) {
       console.error(error);
-      return "Ton compte n'a pas pu être créé";
+      msg.innerHTML = "Erreur de connexion au serveur";
     }
-  }
+  };
 
-  //Oauth Google
-  const googlelogin = document.getElementById("googlelogin");
-  googlelogin.onclick = async () => {
-    await googleAuth();
+  googleBtn.onclick = async () => {
+    try {
+      const resp = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "google" }),
+      });
+
+      const data = await resp.json();
+      if (data.ok) {
+        location.href = "/";
+      } else {
+        msg.innerHTML = data.message || "Échec de connexion Google";
+      }
+    } catch (error) {
+      console.error(error);
+      msg.innerHTML = "Erreur de connexion au serveur";
+    }
   };
 </script>

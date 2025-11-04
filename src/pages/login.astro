@@ -53,34 +53,55 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script type="module">
-  const { pb } = await import("/lib/pb.js");
   const msg = document.getElementById("msg");
-  let message;
-
   const form = document.getElementById("form");
+  const googleBtn = document.getElementById("googlelogin");
+
   form.onsubmit = async (e) => {
     e.preventDefault();
-    const email = form.email.value;
-    const password = form.password.value;
-    message = await authUser(email, password);
-    msg.innerHTML = message;
+    msg.innerHTML = "";
 
-    //auth pocketbase
-    async function authUser(email, password) {
-      try {
-        await pb.collection("users").authWithPassword(email, password);
+    try {
+      const resp = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "login",
+          email: form.email.value,
+          password: form.password.value,
+        }),
+      });
+
+      const data = await resp.json();
+      if (data.ok) {
         location.href = "/";
-        return;
-      } catch (error) {
-        console.error(error);
-        return "Nous n'avons pas réussi à te connecter";
+      } else {
+        msg.innerHTML =
+          data.message || "Nous n'avons pas réussi à te connecter";
       }
+    } catch (error) {
+      console.error(error);
+      msg.innerHTML = "Erreur de connexion au serveur";
     }
+  };
 
-    //Oauth Google
-    const googlelogin = document.getElementById("googlelogin");
-    googlelogin.onclick = async () => {
-      await googleAuth();
-    };
+  googleBtn.onclick = async () => {
+    try {
+      const resp = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "google" }),
+      });
+
+      const data = await resp.json();
+      if (data.ok) {
+        location.href = "/";
+      } else {
+        msg.innerHTML = data.message || "Échec de connexion Google";
+      }
+    } catch (error) {
+      console.error(error);
+      msg.innerHTML = "Erreur de connexion au serveur";
+    }
   };
 </script>

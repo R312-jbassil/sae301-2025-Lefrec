@@ -47,46 +47,41 @@ import Exit from "../assets/exit.svg";
 </header>
 
 <script type="module">
-  const { pb } = await import("/lib/pb.js");
-
   const account = document.getElementById("account");
   const logoutBtn = document.getElementById("logoutbtn");
   const login = document.getElementById("login");
   const signin = document.getElementById("signin");
 
-  const auth = await getAuth();
+  // Initial auth state is set from frontmatter (server-side)
+  const resp = await fetch("/api/auth", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "check" }),
+  });
 
-  if (auth) {
-    account.innerHTML = auth.Prenom;
-    logoutBtn.addEventListener("click", function (e) {
-      logOut();
+  const { ok, user } = await resp.json();
+
+  if (ok && user) {
+    account.innerHTML = user.Prenom;
+    logoutBtn.addEventListener("click", async function (e) {
+      e.preventDefault();
+      try {
+        const resp = await fetch("/api/auth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "logout" }),
+        });
+
+        if (resp.ok) {
+          location.href = "/";
+        }
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     });
     login.hidden = true;
     signin.hidden = true;
   } else {
     logoutBtn.hidden = true;
-  }
-
-  //getAuth
-  async function getAuth() {
-    try {
-      if (pb.authStore.isValid) {
-        console.log("Connected");
-        console.log(pb.authStore.record);
-        return pb.authStore.record;
-      } else {
-        console.log("Not Connected");
-        return;
-      }
-    } catch (error) {
-      console.log(error);
-      return;
-    }
-  }
-
-  //logout
-  async function logOut() {
-    pb.authStore.clear();
-    location.href = location.href;
   }
 </script>
