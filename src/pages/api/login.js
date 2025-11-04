@@ -12,7 +12,7 @@ export async function POST({ request, cookies }) {
     cookies.set("pb_auth", pb.authStore.token, {
       path: "/",
       httpOnly: true,
-      secure: true, // must be HTTPS
+    //   secure: true, // must be HTTPS
       sameSite: "lax",
     });
 
