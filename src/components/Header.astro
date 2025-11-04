@@ -6,17 +6,13 @@ import Exit from "../assets/exit.svg";
 import Pocketbase from "pocketbase";
 const pb = new Pocketbase("http://127.0.0.1:8071");
 
-let token;
-
-if (Astro.cookies.has("pb_auth")) {
-  token = Astro.cookies.get("pb_auth")?.value;
-}
+let token = Astro.cookies.get("pb_auth")?.value;
 
 if (token) {
   pb.authStore.save(token);
 }
 
-let user;
+let user = pb.authStore.record;
 
 if (!user && pb.authStore.isValid) {
   await pb.collection("users").authRefresh();
