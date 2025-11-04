@@ -82,12 +82,13 @@ import Layout from "../layouts/Layout.astro";
         <p id="msg" class="text-center text-red-500 text-sm"></p>
       </form>
       <div class="divider">ou</div>
+      <button id="googlelogin">Se connecter avec Google</button>
     </div>
   </div>
 </Layout>
 
 <script type="module">
-  import { createUser, authUser } from "../../pocketbase/backend.js";
+  import { createUser, googleAuth } from "../../pocketbase/backend.js";
 
   const msg = document.getElementById("msg");
   let message;
@@ -113,5 +114,11 @@ import Layout from "../layouts/Layout.astro";
       passwordConfirm,
     });
     msg.innerHTML = message;
+  };
+
+  //Oauth Google
+  const googlelogin = document.getElementById("googlelogin");
+  googlelogin.onclick = async () => {
+    await googleAuth()
   };
 </script>

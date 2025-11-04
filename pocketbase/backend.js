@@ -60,6 +60,15 @@ export async function logOut() {
     location.href = location.href;
 }
 
+export async function googleAuth() {
+    try {
+      await pb.collection("users").authWithOAuth2({ provider: "google" });
+      location.href = "/";
+    } catch (error) {
+      console.error(error);
+      return "Échec de connexion Google";
+    }
+}
 
 //_Fonctions spécifiques au site_____________________________
 
