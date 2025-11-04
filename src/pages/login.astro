@@ -33,6 +33,7 @@ import Layout from "../layouts/Layout.astro";
             name="password"
             id="password"
             placeholder="Ton mot de passe"
+            minlength="8"
             required
           />
         </div>
@@ -43,7 +44,7 @@ import Layout from "../layouts/Layout.astro";
             >Se connecter</button
           >
         </div>
-        <p id="msg"></p>
+        <p id="msg" class="text-center text-red-500 text-sm"></p>
       </form>
       <div class="divider">ou</div>
     </div>
@@ -60,6 +61,7 @@ import Layout from "../layouts/Layout.astro";
     e.preventDefault();
     const email = form.email.value;
     const password = form.password.value;
-    await authUser(email, password);
+    message = await authUser(email, password);
+    msg.innerHTML = message;
   };
 </script>
