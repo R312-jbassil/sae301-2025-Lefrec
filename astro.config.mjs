@@ -13,6 +13,6 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone',
   }),
-  site: 'https://tavue.paolo-vincent.fr',
   output: 'server',
+  security: { checkOrigin: false },
 });
