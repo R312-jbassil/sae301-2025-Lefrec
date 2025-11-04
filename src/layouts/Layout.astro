@@ -5,22 +5,6 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
 const { title } = Astro.props;
-
-import Pocketbase from "pocketbase";
-const pb = new Pocketbase("https://tavue.pb.paolo-vincent.fr:443");
-
-const token = Astro.cookies.get("pb_auth")?.value;
-
-if (token) {
-  pb.authStore.save(token);
-}
-
-let user = pb.authStore.record;
-
-if (!user && pb.authStore.isValid) {
-  await pb.collection("users").authRefresh();
-  user = pb.authStore.record;
-}
 ---
 
 <!doctype html>
