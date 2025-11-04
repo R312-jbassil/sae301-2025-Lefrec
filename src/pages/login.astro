@@ -7,61 +7,59 @@ import Layout from "../layouts/Layout.astro";
   <div class="flex justify-center">
     <div class="card w-[500px]">
       <div>
-        <h1 class="text-5xl">Créé ton compte maintenant !</h1>
+        <h1 class="text-5xl">Connecte-toi !</h1>
         <p>
           Pour enregistrer tes designs personnalisés, consulter ta galerie et
           commander ta paire.
         </p>
       </div>
-      <form action="" class="flex flex-col gap-2 w-full">
-        <div class="flex gap-4">
-          <div class="flex flex-col flex-1">
-            <label for="prenom">Prénom</label>
-            <input
-              class="input w-full"
-              type="text"
-              name="prenom"
-              id="prenom"
-              placeholder="Votre prénom"
-            />
-          </div>
-          <div class="flex flex-col flex-1">
-            <label for="nom">Nom</label>
-            <input
-              class="input w-full"
-              type="text"
-              name="nom"
-              id="nom"
-              placeholder="Votre nom de famille"
-            />
-          </div>
-        </div>
+      <form id="form" class="flex flex-col gap-2 w-full">
         <div class="flex flex-col flex-1">
           <label for="email">Email</label>
           <input
             class="input w-full"
-            type="text"
+            type="email"
             name="email"
             id="email"
-            placeholder="Votre adresse email"
+            placeholder="Ton adresse email"
+            required
           />
-        </div><div class="flex flex-col flex-1">
-          <label for="motdepasse">Mot de passe</label>
+        </div>
+        <div class="flex flex-col flex-1">
+          <label for="password">Mot de passe</label>
           <input
             class="input w-full"
-            type="text"
-            name="motdepasse"
-            id="motdepasse"
-            placeholder="Votre mot de passe"
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Ton mot de passe"
+            required
           />
         </div>
         <a class="text-xs font-light">Mot de passe oublié ?</a>
         <div class="flex gap-2">
-            <a href="" class="btn flex-1">Se connecter</a>
-            <a href="" class="btn flex-1 btn-primary">Créer un compte</a>
+          <a href="/signin" class="btn flex-1">Je n'ai pas de compte</a>
+          <button type="submit" class="btn flex-1 btn-primary"
+            >Se connecter</button
+          >
         </div>
+        <p id="msg"></p>
       </form>
       <div class="divider">ou</div>
     </div>
   </div>
 </Layout>
+
+<script type="module">
+  import { authUser } from "../../pocketbase/backend.js";
+  const msg = document.getElementById("msg");
+  let message;
+
+  const form = document.getElementById("form");
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const email = form.email.value;
+    const password = form.password.value;
+    await authUser(email, password);
+  };
+</script>

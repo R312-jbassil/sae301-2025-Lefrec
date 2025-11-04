@@ -1,0 +1,117 @@
+---
+import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="TaVue - Connexion">
+  <div class="flex justify-center">
+    <div class="card w-[500px]">
+      <div>
+        <h1 class="text-5xl">Créé ton compte maintenant !</h1>
+        <p>
+          Pour enregistrer tes designs personnalisés, consulter ta galerie et
+          commander ta paire.
+        </p>
+      </div>
+      <form id="form" class="flex flex-col gap-2 w-full">
+        <div class="flex gap-4">
+          <div class="flex flex-col flex-1">
+            <label for="prenom">Prénom</label>
+            <input
+              class="input w-full"
+              type="text"
+              name="prenom"
+              id="prenom"
+              placeholder="Ton prénom"
+              required
+            />
+          </div>
+          <div class="flex flex-col flex-1">
+            <label for="nom">Nom</label>
+            <input
+              class="input w-full"
+              type="text"
+              name="nom"
+              id="nom"
+              placeholder="Ton nom de famille"
+              required
+            />
+          </div>
+        </div>
+        <div class="flex flex-col flex-1">
+          <label for="email">Email</label>
+          <input
+            class="input w-full"
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Ton adresse email"
+            required
+          />
+        </div>
+        <div class="flex flex-col flex-1">
+          <label for="password">Mot de passe</label>
+          <input
+            class="input w-full"
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Ton mot de passe"
+            minlength="8"
+            required
+          />
+        </div>
+        <div class="flex flex-col flex-1">
+          <label for="passwordConfirm">Confirme ton mot de passe</label>
+          <input
+            class="input w-full"
+            type="password"
+            name="passwordConfirm"
+            id="passwordConfirm"
+            placeholder="Ton mot de passe"
+            minlength="8"
+            required
+          />
+        </div>
+        <div class="flex gap-2">
+          <a href="/login" class="btn flex-1">J'ai déjà un compte</a>
+          <button type="submit" class="btn flex-1 btn-primary"
+            >Créer mon compte</button
+          >
+        </div>
+        <p id="msg" class="text-center text-red-500 text-sm"></p>
+      </form>
+      <div class="divider">ou</div>
+    </div>
+  </div>
+</Layout>
+
+<script type="module">
+  import { createUser, authUser } from "../../pocketbase/backend.js";
+
+  const msg = document.getElementById("msg");
+  let message;
+
+  const form = document.getElementById("form");
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const prenom = form.prenom.value;
+    const nom = form.nom.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    const passwordConfirm = form.passwordConfirm.value;
+    if (!(password === passwordConfirm)) {
+      message = "Votre mot de passe n'a pas pu être confirmé";
+      msg.innerHTML = message;
+      return;
+    }
+    message = await createUser({
+      prenom,
+      nom,
+      email,
+      password,
+      passwordConfirm,
+    });
+    msg.innerHTML = message;
+  };
+</script>
