@@ -1,7 +1,33 @@
 ---
 import "../styles/global.css";
+
+import Exit from "../assets/exit.svg";
 ---
 
-<header class="flex px-10 py-4 bg-base-100 shadow-sm justify-between align-middle">
+<header
+  class="flex px-10 py-4 bg-base-100 shadow-sm justify-between items-center"
+>
   <a href="/" class="font-header font-black text-5xl">TaVue</a>
+  <div class="flex gap-8 items-center">
+    <a
+      href="/gallery"
+      class="font-header text-2xl hover:underline decoration-primary"
+      >Ma Galerie</a
+    >
+    <div class="dropdown dropdown-end">
+      <div tabIndex={0} role="button" class="avatar">
+        <div class="w-14 rounded-full ring-primary ring-offset-2 hover:ring-2">
+          <img
+            src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp"
+          />
+        </div>
+      </div>
+      <ul
+        tabindex="-1"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-5 w-52 p-2 shadow"
+      >
+        <li><a class="justify-between text-base">Se déconnecter<Exit class="w-5 h-5" /></a></li>
+      </ul>
+    </div>
+  </div>
 </header>

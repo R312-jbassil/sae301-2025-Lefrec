@@ -61,3 +61,12 @@
         @apply font-header font-semibold text-3xl;
     }
 }
+
+@layer components {
+    .card {
+        @apply flex flex-col gap-4 p-4 bg-base-100 rounded-2xl drop-shadow-sm;
+    }
+    .btn {
+        @apply font-header;
+    }
+}

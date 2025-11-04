@@ -1,12 +1,25 @@
 ---
 import "../styles/global.css";
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+
+import LunettesCustom from "../assets/lunettesCustom.svg";
 ---
 
 <Layout title="TaVue - Ta paire, ton style">
-	<h1>Ceci est un H1</h1>
-	<h2>Ceci est un H2</h2>
-	<h3>Ceci est un H3</h3>
-	<p>Ceci est un simple texte</p>
-	<a href="/" class="btn btn-primary">Bouton</a>
+  <div class="h-[800px] relative">
+    <div class="w-[50%]">
+      <h1>Définis ta paire,<br />définis ton style</h1>
+      <p class="text-3xl">
+        Personnalise les lunettes qui te correspondent vraiment.
+      </p>
+    </div>
+    <LunettesCustom class="absolute right-0 top-0 w-[50%] h-[50%]" />
+  </div>
+  <ul class="steps steps-vertical">
+    <li class="step step-primary">Monture</li>
+    <li class="step step-primary">Branches</li>
+    <li class="step">Pont</li>
+    <li class="step">Verres</li>
+    <li class="step">Gravure</li>
+  </ul>
 </Layout>

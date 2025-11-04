@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="TaVue - Connexion">
+  <div class="flex justify-center">
+    <div class="card w-[500px]">
+      <div>
+        <h1 class="text-5xl">Créé ton compte maintenant !</h1>
+        <p>
+          Pour enregistrer tes designs personnalisés, consulter ta galerie et
+          commander ta paire.
+        </p>
+      </div>
+      <form action="" class="flex flex-col gap-2 w-full">
+        <div class="flex gap-4">
+          <div class="flex flex-col flex-1">
+            <label for="prenom">Prénom</label>
+            <input
+              class="input w-full"
+              type="text"
+              name="prenom"
+              id="prenom"
+              placeholder="Votre prénom"
+            />
+          </div>
+          <div class="flex flex-col flex-1">
+            <label for="nom">Nom</label>
+            <input
+              class="input w-full"
+              type="text"
+              name="nom"
+              id="nom"
+              placeholder="Votre nom de famille"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col flex-1">
+          <label for="email">Email</label>
+          <input
+            class="input w-full"
+            type="text"
+            name="email"
+            id="email"
+            placeholder="Votre adresse email"
+          />
+        </div><div class="flex flex-col flex-1">
+          <label for="motdepasse">Mot de passe</label>
+          <input
+            class="input w-full"
+            type="text"
+            name="motdepasse"
+            id="motdepasse"
+            placeholder="Votre mot de passe"
+          />
+        </div>
+        <a class="text-xs font-light">Mot de passe oublié ?</a>
+        <div class="flex gap-2">
+            <a href="" class="btn flex-1">Se connecter</a>
+            <a href="" class="btn flex-1 btn-primary">Créer un compte</a>
+        </div>
+      </form>
+      <div class="divider">ou</div>
+    </div>
+  </div>
+</Layout>
