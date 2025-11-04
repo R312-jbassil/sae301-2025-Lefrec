@@ -6,25 +6,25 @@ import Exit from "../assets/exit.svg";
 import Pocketbase from "pocketbase";
 const pb = new Pocketbase("https://tavue.pb.paolo-vincent.fr:443");
 
-// let token;
+let token;
 
-// if (Astro.cookies.has("pb_auth")) {
-//   token = Astro.cookies.get("pb_auth")?.value;
-// }
+if (Astro.cookies.has("pb_auth")) {
+  token = Astro.cookies.get("pb_auth")?.value;
+}
 
-// if (token) {
-//   pb.authStore.save(token);
-// }
+if (token) {
+  pb.authStore.save(token);
+}
 
-// let user;
+let user;
 
-// if (!user && pb.authStore.isValid) {
-//   await pb.collection("users").authRefresh();
-//   user = pb.authStore.record;
-// }
+if (!user && pb.authStore.isValid) {
+  await pb.collection("users").authRefresh();
+  user = pb.authStore.record;
+}
 
-// console.log(token);
-// console.log(user);
+console.log(token);
+console.log(user);
 ---
 
 <header
@@ -49,7 +49,7 @@ const pb = new Pocketbase("https://tavue.pb.paolo-vincent.fr:443");
         tabindex="-1"
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-5 w-52 p-2 shadow"
       >
-        <!-- <li id="account" class="px-2 text-lg font-semibold">
+        <li id="account" class="px-2 text-lg font-semibold">
           {user ? user.Prenom : "Tu n'es pas connecté"}
         </li>
         {user ? 
@@ -57,7 +57,7 @@ const pb = new Pocketbase("https://tavue.pb.paolo-vincent.fr:443");
         :
         <li id="signin"><a class="justify-between text-base" href="/signin">Créer un compte</a></li>
         <li id="login"><a class="justify-between text-base" href="/login">Se connecter</a></li>
-        } -->
+        }
       </ul>
     </div>
   </div>
