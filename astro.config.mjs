@@ -11,10 +11,7 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
   adapter: node({
-    mode: 'standalone'
+    mode: 'standalone',
   }),
   output: 'server',
-  security: {
-    checkOrigin: false
-  }
 });
