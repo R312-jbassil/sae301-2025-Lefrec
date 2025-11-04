@@ -88,7 +88,7 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script type="module">
-  const { pb } = await import("/pocketbase/pb.js");
+  const { pb } = await import("/lib/pb.js");
 
   const msg = document.getElementById("msg");
   let message;
@@ -119,25 +119,25 @@ import Layout from "../layouts/Layout.astro";
   //auth pocketbase
   async function createUser(data) {
     try {
-        await pb.collection("users").create({
-            Prenom: data.prenom,
-            Nom: data.nom,
-            email: data.email,
-            password: data.password,
-            passwordConfirm: data.passwordConfirm,
-        });
-        await pb.collection("users").authWithPassword(data.email, data.password);
-        location.href = "/";
-        return "Ton compte a bien été créé";
+      await pb.collection("users").create({
+        Prenom: data.prenom,
+        Nom: data.nom,
+        email: data.email,
+        password: data.password,
+        passwordConfirm: data.passwordConfirm,
+      });
+      await pb.collection("users").authWithPassword(data.email, data.password);
+      location.href = "/";
+      return "Ton compte a bien été créé";
     } catch (error) {
-        console.error(error);
-        return "Ton compte n'a pas pu être créé";
+      console.error(error);
+      return "Ton compte n'a pas pu être créé";
     }
-}
+  }
 
   //Oauth Google
   const googlelogin = document.getElementById("googlelogin");
   googlelogin.onclick = async () => {
-    await googleAuth()
+    await googleAuth();
   };
 </script>

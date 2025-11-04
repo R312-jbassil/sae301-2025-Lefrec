@@ -53,7 +53,7 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script type="module">
-  const { pb } = await import("/pocketbase/pb.js");
+  const { pb } = await import("/lib/pb.js");
   const msg = document.getElementById("msg");
   let message;
 
