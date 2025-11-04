@@ -30,7 +30,9 @@ import Layout from "../layouts/Layout.astro";
             minlength="8"
             required
           />
-          <button type="submit">Se connecter</button>
+          <button type="submit" class="btn flex-1 btn-primary"
+            >Se connecter</button
+          >
         </div>
         <p id="msg" class="text-red-500"></p>
       </form>
@@ -42,18 +44,19 @@ import Layout from "../layouts/Layout.astro";
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const email = form.email.value;
-        const password = form.password.value;
 
         const res = await fetch("/api/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-          credentials: "include", // important if you want cookies sent/received
+          body: JSON.stringify({
+            email: form.email.value,
+            password: form.password.value,
+          }),
+          credentials: "include", // ensures cookies are accepted
         });
 
         if (res.ok) {
-          window.location.href = "/"; // redirect after login
+          window.location.href = "/"; // redirect after successful login
         } else {
           const data = await res.json();
           msg.textContent = data.error;
