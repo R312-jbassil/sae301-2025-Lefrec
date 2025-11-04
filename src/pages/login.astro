@@ -8,36 +8,57 @@ import Layout from "../layouts/Layout.astro";
     <div class="card w-[500px]">
       <h1 class="text-5xl">Connecte-toi !</h1>
       <form id="loginForm" class="flex flex-col gap-2 w-full">
-        <input type="email" id="email" placeholder="Email" required />
-        <input type="password" id="password" placeholder="Mot de passe" required minlength="8" />
-        <button type="submit">Se connecter</button>
+        <div class="flex flex-col flex-1">
+          <label for="email">Email</label>
+          <input
+            class="input w-full"
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Ton adresse email"
+            required
+          />
+        </div>
+        <div class="flex flex-col flex-1">
+          <label for="password">Mot de passe</label>
+          <input
+            class="input w-full"
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Ton mot de passe"
+            minlength="8"
+            required
+          />
+          <button type="submit">Se connecter</button>
+        </div>
+        <p id="msg" class="text-red-500"></p>
       </form>
-      <p id="msg" class="text-red-500"></p>
     </div>
-  </div>
 
-  <script>
-    const form = document.getElementById("loginForm");
-    const msg = document.getElementById("msg");
+    <script>
+      const form = document.getElementById("loginForm");
+      const msg = document.getElementById("msg");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = form.email.value;
-      const password = form.password.value;
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = form.email.value;
+        const password = form.password.value;
 
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include" // important if you want cookies sent/received
+        const res = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+          credentials: "include", // important if you want cookies sent/received
+        });
+
+        if (res.ok) {
+          window.location.href = "/"; // redirect after login
+        } else {
+          const data = await res.json();
+          msg.textContent = data.error;
+        }
       });
-
-      if (res.ok) {
-        window.location.href = "/"; // redirect after login
-      } else {
-        const data = await res.json();
-        msg.textContent = data.error;
-      }
-    });
-  </script>
+    </script>
+  </div>
 </Layout>
