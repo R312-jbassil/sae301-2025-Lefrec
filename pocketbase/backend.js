@@ -1,5 +1,5 @@
 import Pocketbase from "pocketbase";
-const pb = new Pocketbase('https://tavue.pb.paolo-vincent.fr:443');
+const pb = new Pocketbase('http://localhost:8071');
 
 //_Fonctions d'authentification_________________________________
 
