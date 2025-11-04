@@ -3,41 +3,18 @@ import "../styles/global.css";
 
 import Exit from "../assets/exit.svg";
 
-// import Pocketbase from "pocketbase";
-// const pb = new Pocketbase("http://127.0.0.1:8071");
+import PocketBase from "pocketbase";
 
-// let token = Astro.cookies.get("pb_auth")?.value;
-
-// if (token) {
-//   pb.authStore.save(token);
-// }
-
-// let user = pb.authStore.record;
-
-// if (!user && pb.authStore.isValid) {
-//   await pb.collection("users").authRefresh();
-//   user = pb.authStore.record;
-// }
-
-// console.log(token);
-// console.log(user);
-
-import PocketBase from 'pocketbase';
-
-const pb = new PocketBase('http://127.0.0.1:8071'); // or public URL
-
-// get the token from cookies
-const token = Astro.cookies.get('pb_auth')?.value;
+const pb = new PocketBase("http://127.0.0.1:8071");
+const token = Astro.cookies.get("pb_auth")?.value;
+let user = null;
 
 if (token) {
-  pb.authStore.save(token); // load token into authStore
-}
-
-// optionally refresh to get full user record
-let user = null;
-if (pb.authStore.isValid) {
-  await pb.collection('users').authRefresh();
-  user = pb.authStore.record; // current user info
+  pb.authStore.save(token);
+  if (pb.authStore.isValid) {
+    await pb.collection("users").authRefresh();
+    user = pb.authStore.record;
+  }
 }
 ---
 

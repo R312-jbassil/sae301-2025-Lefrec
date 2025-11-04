@@ -1,116 +1,42 @@
 ---
 import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
-
-// import Pocketbase from "pocketbase";
-// const pb = new Pocketbase("http://127.0.0.1:8071");
-// let token = Astro.cookies.get("pb_auth")?.value;
-// if (token) {
-//   pb.authStore.save(token);
-// }
-// let user = pb.authStore.record;
-// if (!user && pb.authStore.isValid) {
-//   await pb.collection("users").authRefresh();
-//   user = pb.authStore.record;
-// }
-// let msg = "";
-// if (Astro.request.method === "POST") {
-//   const formData = await Astro.request.formData();
-//   try {
-//     const email = formData.get("email");
-//     const password = formData.get("password");
-//     await pb.collection("users").authWithPassword(email, password);
-//     Astro.cookies.set("pb_auth", pb.authStore.token, {
-//       path: "/",
-//       httpOnly: true,
-//     });
-//     return Astro.redirect("/");
-//   } catch (error) {
-//     console.log(error);
-//     msg = "Connexion impossible";
-//   }
-// }
 ---
 
 <Layout title="TaVue - Connexion">
   <div class="flex justify-center">
     <div class="card w-[500px]">
-      <div>
-        <h1 class="text-5xl">Connecte-toi !</h1>
-        <p>
-          Pour enregistrer tes designs personnalisés, consulter ta galerie et
-          commander ta paire.
-        </p>
-      </div>
+      <h1 class="text-5xl">Connecte-toi !</h1>
       <form id="loginForm" class="flex flex-col gap-2 w-full">
-        <div class="flex flex-col flex-1">
-          <label for="email">Email</label>
-          <input
-            class="input w-full"
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Ton adresse email"
-            required
-          />
-        </div>
-        <div class="flex flex-col flex-1">
-          <label for="password">Mot de passe</label>
-          <input
-            class="input w-full"
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Ton mot de passe"
-            minlength="8"
-            required
-          />
-        </div>
-        <a class="text-xs font-light">Mot de passe oublié ?</a>
-        <div class="flex gap-2">
-          <a href="/signin" class="btn flex-1">Je n'ai pas de compte</a>
-          <button type="submit" class="btn flex-1 btn-primary"
-            >Se connecter</button
-          >
-        </div>
-        <p id="msg" class="text-center text-red-500 text-sm"></p>
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Mot de passe" required minlength="8" />
+        <button type="submit">Se connecter</button>
       </form>
-      <div class="divider">ou</div>
-      <button id="googlelogin">Se connecter avec Google</button>
+      <p id="msg" class="text-red-500"></p>
     </div>
   </div>
 
-  <script type="module">
-    import PocketBase from "https://cdn.jsdelivr.net/npm/pocketbase@0.26.2/dist/pocketbase.es.mjs";
-
-    const pb = new PocketBase("https://tavue.pb.paolo-vincent.fr"); // public URL with HTTPS
-
+  <script>
     const form = document.getElementById("loginForm");
     const msg = document.getElementById("msg");
 
     form.addEventListener("submit", async (e) => {
-      e.preventDefault(); // prevent default POST
-
+      e.preventDefault();
       const email = form.email.value;
       const password = form.password.value;
 
-      try {
-        await pb.collection("users").authWithPassword(email, password);
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include" // important if you want cookies sent/received
+      });
 
-        // Save the auth token as a cookie (or localStorage)
-        // document.cookie = `pb_auth=${pb.authStore.token}; path=/; secure`;
-
-        await fetch("/api/set-cookie", {
-          method: "POST",
-          body: JSON.stringify({ token: pb.authStore.token }),
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        });
-
-        location.href = "/";
-      } catch (err) {
-        console.error(err);
-        msg.textContent = "Connexion impossible";
+      if (res.ok) {
+        window.location.href = "/"; // redirect after login
+      } else {
+        const data = await res.json();
+        msg.textContent = data.error;
       }
     });
   </script>
