@@ -14,5 +14,4 @@ export default defineConfig({
     mode: 'standalone',
   }),
   output: 'server',
-  security: { checkOrigin: false },
 });

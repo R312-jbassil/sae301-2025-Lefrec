@@ -2,40 +2,34 @@
 import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
 
-import Pocketbase from "pocketbase";
-const pb = new Pocketbase("http://127.0.0.1:8071");
-
-let token = Astro.cookies.get("pb_auth")?.value;
-
-if (token) {
-  pb.authStore.save(token);
-}
-
-let user = pb.authStore.record;
-
-if (!user && pb.authStore.isValid) {
-  await pb.collection("users").authRefresh();
-  user = pb.authStore.record;
-}
-
-let msg = "";
-
-if (Astro.request.method === "POST") {
-  const formData = await Astro.request.formData();
-  try {
-    const email = formData.get("email");
-    const password = formData.get("password");
-    await pb.collection("users").authWithPassword(email, password);
-    Astro.cookies.set("pb_auth", pb.authStore.token, {
-      path: "/",
-      httpOnly: true,
-    });
-    return Astro.redirect("/");
-  } catch (error) {
-    console.log(error);
-    msg = "Connexion impossible";
-  }
-}
+// import Pocketbase from "pocketbase";
+// const pb = new Pocketbase("http://127.0.0.1:8071");
+// let token = Astro.cookies.get("pb_auth")?.value;
+// if (token) {
+//   pb.authStore.save(token);
+// }
+// let user = pb.authStore.record;
+// if (!user && pb.authStore.isValid) {
+//   await pb.collection("users").authRefresh();
+//   user = pb.authStore.record;
+// }
+// let msg = "";
+// if (Astro.request.method === "POST") {
+//   const formData = await Astro.request.formData();
+//   try {
+//     const email = formData.get("email");
+//     const password = formData.get("password");
+//     await pb.collection("users").authWithPassword(email, password);
+//     Astro.cookies.set("pb_auth", pb.authStore.token, {
+//       path: "/",
+//       httpOnly: true,
+//     });
+//     return Astro.redirect("/");
+//   } catch (error) {
+//     console.log(error);
+//     msg = "Connexion impossible";
+//   }
+// }
 ---
 
 <Layout title="TaVue - Connexion">
@@ -48,7 +42,7 @@ if (Astro.request.method === "POST") {
           commander ta paire.
         </p>
       </div>
-      <form method="POST" action="/login" class="flex flex-col gap-2 w-full">
+      <form id="loginForm" class="flex flex-col gap-2 w-full">
         <div class="flex flex-col flex-1">
           <label for="email">Email</label>
           <input
@@ -79,10 +73,44 @@ if (Astro.request.method === "POST") {
             >Se connecter</button
           >
         </div>
-        <p id="msg" class="text-center text-red-500 text-sm">{msg}</p>
+        <p id="msg" class="text-center text-red-500 text-sm"></p>
       </form>
       <div class="divider">ou</div>
       <button id="googlelogin">Se connecter avec Google</button>
     </div>
   </div>
+
+  <script type="module">
+    import PocketBase from "https://cdn.jsdelivr.net/npm/pocketbase@0.13.7/dist/pocketbase.es.mjs";
+
+    const pb = new PocketBase("https://tavue.pb.paolo-vincent.fr"); // public URL with HTTPS
+
+    const form = document.getElementById("loginForm");
+    const msg = document.getElementById("msg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault(); // prevent default POST
+
+      const email = form.email.value;
+      const password = form.password.value;
+
+      try {
+        await pb.collection("users").authWithPassword(email, password);
+
+        // Save the auth token as a cookie (or localStorage)
+        // document.cookie = `pb_auth=${pb.authStore.token}; path=/; secure`;
+
+        await fetch("/api/set-cookie", {
+          method: "POST",
+          body: JSON.stringify({ token: pb.authStore.token }),
+          headers: { "Content-Type": "application/json" },
+        });
+
+        window.location.href = "/"; // redirect after login
+      } catch (err) {
+        console.error(err);
+        msg.textContent = "Connexion impossible";
+      }
+    });
+  </script>
 </Layout>
