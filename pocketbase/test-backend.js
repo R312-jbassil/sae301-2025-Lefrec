@@ -1,3 +1,3 @@
-import { getTeinteVerre } from "../src/script/backend.js";
+import { getTeinteVerre } from "../src/lib/backend.js";
 
 console.log(await getTeinteVerre());

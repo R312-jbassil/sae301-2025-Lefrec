@@ -26,7 +26,9 @@ import Exit from "../assets/exit.svg";
         tabindex="-1"
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-5 w-52 p-2 shadow"
       >
-        <li id="account" class="px-2 text-lg font-semibold">Tu n'es pas connecté</li>
+        <li id="account" class="px-2 text-lg font-semibold">
+          Tu n'es pas connecté
+        </li>
         <li>
           <button id="logoutbtn" class="justify-between text-base"
             >Se déconnecter<Exit class="w-5 h-5" />
@@ -45,7 +47,7 @@ import Exit from "../assets/exit.svg";
 </header>
 
 <script type="module">
-  import { getAuth, logOut } from "../../pocketbase/backend";
+  const { pb } = await import("/pocketbase/pb.js");
 
   const account = document.getElementById("account");
   const logoutBtn = document.getElementById("logoutbtn");
@@ -63,5 +65,28 @@ import Exit from "../assets/exit.svg";
     signin.hidden = true;
   } else {
     logoutBtn.hidden = true;
+  }
+
+  //getAuth
+  async function getAuth() {
+    try {
+      if (pb.authStore.isValid) {
+        console.log("Connected");
+        console.log(pb.authStore.record);
+        return pb.authStore.record;
+      } else {
+        console.log("Not Connected");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  }
+
+  //logout
+  async function logOut() {
+    pb.authStore.clear();
+    location.href = location.href;
   }
 </script>

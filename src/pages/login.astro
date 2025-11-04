@@ -53,7 +53,7 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script type="module">
-  import { authUser, googleAuth } from "../script/backend.js";
+  const { pb } = await import("/pocketbase/pb.js");
   const msg = document.getElementById("msg");
   let message;
 
@@ -64,6 +64,18 @@ import Layout from "../layouts/Layout.astro";
     const password = form.password.value;
     message = await authUser(email, password);
     msg.innerHTML = message;
+
+    //auth pocketbase
+    async function authUser(email, password) {
+      try {
+        await pb.collection("users").authWithPassword(email, password);
+        location.href = "/";
+        return;
+      } catch (error) {
+        console.error(error);
+        return "Nous n'avons pas réussi à te connecter";
+      }
+    }
 
     //Oauth Google
     const googlelogin = document.getElementById("googlelogin");
