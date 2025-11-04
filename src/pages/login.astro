@@ -104,9 +104,10 @@ import Layout from "../layouts/Layout.astro";
           method: "POST",
           body: JSON.stringify({ token: pb.authStore.token }),
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         });
 
-        window.location.href = "/"; // redirect after login
+        location.href = "/";
       } catch (err) {
         console.error(err);
         msg.textContent = "Connexion impossible";
