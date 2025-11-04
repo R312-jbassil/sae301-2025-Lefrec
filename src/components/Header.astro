@@ -2,6 +2,24 @@
 import "../styles/global.css";
 
 import Exit from "../assets/exit.svg";
+
+import Pocketbase from "pocketbase";
+const pb = new Pocketbase("https://tavue.pb.paolo-vincent.fr:443");
+
+const token = Astro.cookies.get("pb_auth")?.value;
+
+if (token) {
+  pb.authStore.save(token);
+}
+
+let user = pb.authStore.record;
+
+if (!user && pb.authStore.isValid) {
+  await pb.collection("users").authRefresh();
+  user = pb.authStore.record;
+}
+
+console.log(user);
 ---
 
 <header
@@ -27,61 +45,15 @@ import Exit from "../assets/exit.svg";
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-5 w-52 p-2 shadow"
       >
         <li id="account" class="px-2 text-lg font-semibold">
-          Tu n'es pas connecté
+          {user ? user.Prenom : "Tu n'es pas connecté"}
         </li>
-        <li>
-          <button id="logoutbtn" class="justify-between text-base"
-            >Se déconnecter<Exit class="w-5 h-5" />
-          </button>
-        </li>
-        <li id="signin">
-          <a class="justify-between text-base" href="/signin">Créer un compte</a
-          >
-        </li>
-        <li id="login">
-          <a class="justify-between text-base" href="/login">Se connecter</a>
-        </li>
+        {user ? 
+        <li><a href="/logout" class="justify-between text-base">Se déconnecter<Exit class="w-5 h-5" /></a></li> 
+        :
+        <li id="signin"><a class="justify-between text-base" href="/signin">Créer un compte</a></li>
+        <li id="login"><a class="justify-between text-base" href="/login">Se connecter</a></li>
+        }
       </ul>
     </div>
   </div>
 </header>
-
-<script type="module">
-  const account = document.getElementById("account");
-  const logoutBtn = document.getElementById("logoutbtn");
-  const login = document.getElementById("login");
-  const signin = document.getElementById("signin");
-
-  // Initial auth state is set from frontmatter (server-side)
-  const resp = await fetch("/api/auth", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action: "check" }),
-  });
-
-  const { ok, user } = await resp.json();
-
-  if (ok && user) {
-    account.innerHTML = user.Prenom;
-    logoutBtn.addEventListener("click", async function (e) {
-      e.preventDefault();
-      try {
-        const resp = await fetch("/api/auth", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "logout" }),
-        });
-
-        if (resp.ok) {
-          location.href = "/";
-        }
-      } catch (error) {
-        console.error("Logout failed:", error);
-      }
-    });
-    login.hidden = true;
-    signin.hidden = true;
-  } else {
-    logoutBtn.hidden = true;
-  }
-</script>

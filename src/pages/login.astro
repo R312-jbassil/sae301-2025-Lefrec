@@ -1,6 +1,41 @@
 ---
 import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
+
+import Pocketbase from "pocketbase";
+const pb = new Pocketbase("https://tavue.pb.paolo-vincent.fr:443");
+
+const token = Astro.cookies.get("pb_auth")?.value;
+
+if (token) {
+  pb.authStore.save(token);
+}
+
+let user = pb.authStore.record;
+
+if (!user && pb.authStore.isValid) {
+  await pb.collection("users").authRefresh();
+  user = pb.authStore.record;
+}
+
+let msg = "";
+
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  try {
+    const email = formData.get("email");
+    const password = formData.get("password");
+    await pb.collection("users").authWithPassword(email, password);
+    Astro.cookies.set("pb_auth", pb.authStore.token, {
+      path: "/",
+      httpOnly: true,
+    });
+    return Astro.redirect("/");
+  } catch (error) {
+    console.log(error);
+    msg = "Connexion impossible";
+  }
+}
 ---
 
 <Layout title="TaVue - Connexion">
@@ -13,7 +48,7 @@ import Layout from "../layouts/Layout.astro";
           commander ta paire.
         </p>
       </div>
-      <form id="form" class="flex flex-col gap-2 w-full">
+      <form method="POST" class="flex flex-col gap-2 w-full">
         <div class="flex flex-col flex-1">
           <label for="email">Email</label>
           <input
@@ -44,64 +79,10 @@ import Layout from "../layouts/Layout.astro";
             >Se connecter</button
           >
         </div>
-        <p id="msg" class="text-center text-red-500 text-sm"></p>
+        <p id="msg" class="text-center text-red-500 text-sm">{msg}</p>
       </form>
       <div class="divider">ou</div>
       <button id="googlelogin">Se connecter avec Google</button>
     </div>
   </div>
 </Layout>
-
-<script type="module">
-  const msg = document.getElementById("msg");
-  const form = document.getElementById("form");
-  const googleBtn = document.getElementById("googlelogin");
-
-  form.onsubmit = async (e) => {
-    e.preventDefault();
-    msg.innerHTML = "";
-
-    try {
-      const resp = await fetch("/api/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "login",
-          email: form.email.value,
-          password: form.password.value,
-        }),
-      });
-
-      const data = await resp.json();
-      if (data.ok) {
-        location.href = "/";
-      } else {
-        msg.innerHTML =
-          data.message || "Nous n'avons pas réussi à te connecter";
-      }
-    } catch (error) {
-      console.error(error);
-      msg.innerHTML = "Erreur de connexion au serveur";
-    }
-  };
-
-  googleBtn.onclick = async () => {
-    try {
-      const resp = await fetch("/api/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "google" }),
-      });
-
-      const data = await resp.json();
-      if (data.ok) {
-        location.href = "/";
-      } else {
-        msg.innerHTML = data.message || "Échec de connexion Google";
-      }
-    } catch (error) {
-      console.error(error);
-      msg.innerHTML = "Erreur de connexion au serveur";
-    }
-  };
-</script>
