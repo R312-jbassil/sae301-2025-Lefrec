@@ -49,7 +49,7 @@ console.log("user : "+user);
           {user ? user.Prenom : "Tu n'es pas connecté"}
         </li>
         {user ? 
-        <li><a href="/logout" class="justify-between text-base">Se déconnecter<Exit class="w-5 h-5" /></a></li> 
+        <li><a id="logout" class="justify-between text-base">Se déconnecter<Exit class="w-5 h-5" /></a></li> 
         :
         <li id="signin"><a class="justify-between text-base" href="/signin">Créer un compte</a></li>
         <li id="login"><a class="justify-between text-base" href="/login">Se connecter</a></li>
@@ -58,3 +58,18 @@ console.log("user : "+user);
     </div>
   </div>
 </header>
+
+<script type="module">
+  import pocketbase from "https://cdn.jsdelivr.net/npm/pocketbase@0.26.2/dist/pocketbase.es.mjs";
+  const pb = new pocketbase("https://tavue.pb.paolo-vincent.fr");
+
+  const logout = document.getElementById("logout");
+
+  if (logout) {
+    logout.addEventListener("click", (e) => {
+      pb.authStore.clear();
+      document.cookie = "pb_auth =; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      location.href = "/";
+    })
+  }
+</script>
