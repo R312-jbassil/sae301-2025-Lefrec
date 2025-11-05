@@ -1,27 +1,122 @@
 ---
 import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
-
-import LunettesCustom from "../assets/lunettesCustom.svg";
+import Down from "../assets/Down.svg";
 import Glass from "../components/Glass.astro";
 ---
 
 <Layout title="TaVue - Ta paire, ton style">
-  <div class="h-[800px] relative">
+  <div id="top" class="h-[calc(100vh-74px)] flex p-10 relative">
     <div class="w-[50%]">
       <h1>Définis ta paire,<br />définis ton style</h1>
       <p class="text-3xl">
         Personnalise les lunettes qui te correspondent vraiment.
       </p>
     </div>
-    <LunettesCustom class="absolute right-0 top-0 w-[50%] h-[50%]" />
+    <div class="w-[50%] h-[50%] flex items-center">
+      <Glass id="glass" monture="Or" branche="Noyer" verre="Charbon" />
+    </div>
+    <div
+      class="absolute w-[70px] h-[70px] rounded-full bg-primary flex justify-center items-center bottom-[10%] left-[50%]"
+    >
+      <Down />
+    </div>
   </div>
-  <Glass monture="Or" branche="Noyer" verre="Charbon"/>
-  <ul class="steps steps-vertical">
-    <li class="step step-primary">Monture</li>
-    <li class="step step-primary">Branches</li>
-    <li class="step">Pont</li>
-    <li class="step">Verres</li>
-    <li class="step">Gravure</li>
-  </ul>
+  <div id="mid" class="flex">
+    <div id="progress">
+      <ul class="steps steps-vertical">
+        <li class="step step-primary">Monture</li>
+        <li class="step step-primary">Branches</li>
+        <li class="step">Pont</li>
+        <li class="step">Verres</li>
+        <li class="step">Gravure</li>
+      </ul>
+    </div>
+    <div id="screens" class="flex-1">
+      <div id="screen1" class="screen justify-start">
+        <section id="section1" class="section w-2/5">
+          <h2>Monture</h2>
+          <p>
+            La monture est l’élément centrale d’un paire de lunettes, elle
+            définit sa forme globale.
+          </p>
+          <h3>Matériaux</h3>
+          <div></div>
+        </section>
+      </div>
+      <div id="screen2" class="screen justify-end">
+        <section id="section2" class="section w-2/5">
+          <h2>Branches</h2>
+          <p>
+            La monture est l’élément centrale d’un paire de lunettes, elle
+            définit sa forme globale.
+          </p>
+          <h3>Matériaux</h3>
+          <div></div>
+        </section>
+      </div>
+      <div id="screen3" class="screen justify-end">
+        <section id="section3" class="section w-1/2">
+          <h2>Pont</h2>
+          <p>
+            La monture est l’élément centrale d’un paire de lunettes, elle
+            définit sa forme globale.
+          </p>
+          <h3>Largeur</h3>
+          <div></div>
+        </section>
+      </div>
+      <div id="screen4" class="screen justify-start">
+        <section id="section4" class="section w-1/2">
+          <h2>Verres</h2>
+          <p>
+            La monture est l’élément centrale d’un paire de lunettes, elle
+            définit sa forme globale.
+          </p>
+          <h3>Taille</h3>
+          <div></div>
+          <h3>Teinte</h3>
+          <div></div>
+        </section>
+      </div>
+      <div id="screen5" class="screen justify-end">
+        <section id="section5" class="section w-1/2">
+          <h2>Gravure</h2>
+          <p>
+            La monture est l’élément centrale d’un paire de lunettes, elle
+            définit sa forme globale.
+          </p>
+          <h3>Texte personnalisé</h3>
+          <div></div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div id="bottom" class="h-screen">
+    <p>Bottom screen</p>
+  </div>
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"
+  ></script> -->
+  <script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+      const mid = document.getElementById("mid");
+      const progress = document.getElementById("progress");
+
+      gsap.from(progress, {
+        opacity: 0,
+        scrollTrigger: {
+          trigger: mid,
+          pin: true,
+          markers: true,
+        },
+      })
+  </script>
 </Layout>

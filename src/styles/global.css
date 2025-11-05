@@ -47,9 +47,10 @@
 @layer base {
     * {
         @apply font-common text-base;
+        @apply border-1 border-red-500;
     }
     main {
-        @apply p-10;
+        @apply p-0;
     }
     h1 {
         @apply font-header font-extrabold text-8xl;
@@ -63,10 +64,13 @@
 }
 
 @layer components {
-    .card {
-        @apply flex flex-col gap-4 p-4 bg-base-100 rounded-2xl drop-shadow-sm;
-    }
     .btn {
         @apply font-header;
+    }
+    .screen {
+        @apply h-screen flex p-4 items-center;
+    }
+    .section {
+        @apply flex flex-col gap-2;
     }
 }
