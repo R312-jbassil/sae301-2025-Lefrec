@@ -3,7 +3,7 @@ import "../styles/global.css";
 import Exit from "../assets/exit.svg";
 
 import Pocketbase from "pocketbase";
-const pb = new Pocketbase("https://tavue.pb.paolo-vincent.fr");
+const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");
 
 let token = Astro.cookies.get("pb_auth")?.value;
 
@@ -59,7 +59,7 @@ console.log("user : "+user);
 
 <script type="module">
   import pocketbase from "https://cdn.jsdelivr.net/npm/pocketbase@0.26.2/dist/pocketbase.es.mjs";
-  const pb = new pocketbase("https://tavue.pb.paolo-vincent.fr");
+  const pb = new pocketbase("https://tavue.paolo-vincent.fr/pb/");
 
   const logout = document.getElementById("logout");
 
