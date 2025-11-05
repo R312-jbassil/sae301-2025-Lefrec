@@ -34,11 +34,9 @@ console.log("user : "+user);
       >Ma Galerie</a
     >
     <div class="dropdown dropdown-end">
-      <div tabIndex={0} role="button" class="avatar">
-        <div class="w-14 rounded-full ring-primary ring-offset-2 hover:ring-2">
-          <img
-            src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp"
-          />
+      <div tabIndex={0} role="button" class="avatar avatar-placeholder">
+        <div class="w-14 bg-neutral text-neutral-content rounded-full ring-primary ring-offset-2 hover:ring-2">
+          <span class="text-3xl">{user ? user.Prenom[0] : "U"}</span>
         </div>
       </div>
       <ul
