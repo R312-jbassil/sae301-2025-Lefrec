@@ -69,8 +69,12 @@
     }
     .screen {
         @apply h-screen flex p-4 items-center;
+        /* test gsap */
+        /* @apply opacity-0 scale-0; */
     }
     .section {
         @apply flex flex-col gap-2;
+        /* test gsap */
+        /* @apply opacity-0 scale-0; */
     }
 }
