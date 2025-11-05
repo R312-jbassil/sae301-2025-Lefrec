@@ -6,7 +6,13 @@ import Layout from "../layouts/Layout.astro";
 <Layout title="TaVue - Connexion">
   <div class="flex justify-center">
     <div class="card w-[500px]">
-      <h1 class="text-5xl">Connecte-toi !</h1>
+      <div>
+        <h1 class="text-5xl">Connecte-toi !</h1>
+        <p>
+          Pour enregistrer tes designs personnalisés, consulter ta galerie et
+          commander ta paire.
+        </p>
+      </div>
       <form id="loginForm" class="flex flex-col gap-2 w-full">
         <div class="flex flex-col flex-1">
           <label for="email">Email</label>
@@ -30,38 +36,46 @@ import Layout from "../layouts/Layout.astro";
             minlength="8"
             required
           />
+        </div>
+        <div class="flex gap-2">
+          <a href="/signin" class="btn flex-1">Je n'ai pas de compte</a>
           <button type="submit" class="btn flex-1 btn-primary"
             >Se connecter</button
           >
         </div>
-        <p id="msg" class="text-red-500"></p>
+        <p id="msg" class="text-center text-red-500 text-sm"></p>
       </form>
     </div>
 
     <script>
+      import pocketbase from "https://cdn.jsdelivr.net/npm/pocketbase@0.26.2/dist/pocketbase.es.mjs";
+      const pb = new pocketbase("https://tavue.pb.paolo-vincent.fr");
+
       const form = document.getElementById("loginForm");
       const msg = document.getElementById("msg");
+      let message;
 
-      form.addEventListener("submit", async (e) => {
+      form.onsubmit = async (e) => {
         e.preventDefault();
+        const email = form.email.value;
+        const password = form.password.value;
+        message = await authUser(email, password);
+        msg.textContent = message;
 
-        const res = await fetch("/api/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: form.email.value,
-            password: form.password.value,
-          }),
-          credentials: "include", // ensures cookies are accepted
-        });
-
-        if (res.ok) {
-          window.location.href = "/"; // redirect after successful login
-        } else {
-          const data = await res.json();
-          msg.textContent = data.error;
+        //auth pocketbase
+        async function authUser(email, password) {
+          try {
+            await pb.collection("users").authWithPassword(email, password);
+            document.cookie = `pb_auth = ${pb.authStore.token}; path=/`;
+            console.log(document.cookie);
+            location.href = "/";
+            return;
+          } catch (error) {
+            console.error(error);
+            return "Nous n'avons pas réussi à te connecter";
+          }
         }
-      });
+      };
     </script>
   </div>
 </Layout>
