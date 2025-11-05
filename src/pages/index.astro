@@ -3,6 +3,10 @@ import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
 import Down from "../assets/Down.svg";
 import Glass from "../components/Glass.astro";
+
+let monture = "Carbone";
+let branche = "Noyer";
+let verre = "Charbon";
 ---
 
 <Layout title="TaVue - Ta paire, ton style">
@@ -14,7 +18,7 @@ import Glass from "../components/Glass.astro";
       </p>
     </div>
     <div class="w-[50%] h-[50%] flex items-center">
-      <Glass id="glass" monture="Or" branche="Noyer" verre="Charbon" />
+      <!-- <Glass id="glass" monture={monture} branche={branche} verre={verre} /> -->
     </div>
     <div
       id="arrow"
@@ -24,22 +28,54 @@ import Glass from "../components/Glass.astro";
     </div>
   </div>
   <div id="mid" class="flex relative">
-    <div id="progress" class="sticky top-0 h-screen flex items-center">
-      <ul class="steps steps-vertical">
-        <li class="step step-primary">Monture</li>
-        <li class="step step-primary">Branches</li>
-        <li class="step">Pont</li>
-        <li class="step">Verres</li>
-        <li class="step">Gravure</li>
-      </ul>
+    <div
+      id="progress"
+      class="sticky top-0 h-screen flex px-10 justify-center items-center"
+    >
+      <div class="h-1/2 w-2 bg-base-300">
+        <div id="progressFill" class="w-full h-0 bg-primary"></div>
+      </div>
+      <div class="flex flex-col h-1/2 justify-between">
+        <div class="progressInfo">
+          <div class="progressCircle">
+            <span>1</span>
+          </div>
+          <span>Monture</span>
+        </div>
+        <div class="progressInfo">
+          <div class="progressCircle">
+            <span>2</span>
+          </div>
+          <span>Branches</span>
+        </div>
+        <div class="progressInfo">
+          <div class="progressCircle">
+            <span>3</span>
+          </div>
+          <span>Pont</span>
+        </div>
+        <div class="progressInfo">
+          <div class="progressCircle">
+            <span>4</span>
+          </div>
+          <span>Verres</span>
+        </div>
+        <div class="progressInfo">
+          <div class="progressCircle">
+            <span>5</span>
+          </div>
+          <span>Gravure</span>
+        </div>
+      </div>
     </div>
     <div id="screens" class="flex-1">
       <div id="screen1" class="screen justify-start">
         <section id="section1" class="section w-2/5">
           <h2>Monture</h2>
-          <p>
+          <p class="sectionDesc">
             La monture est l’élément centrale d’un paire de lunettes, elle
-            définit sa forme globale.
+            définit sa forme globale. Sélectionne le matériau qui reflète ton
+            style. Élégance, légéreté ou audace, à toi de choisir.
           </p>
           <h3>Matériaux</h3>
           <div></div>
@@ -48,31 +84,41 @@ import Glass from "../components/Glass.astro";
       <div id="screen2" class="screen justify-end">
         <section id="section2" class="section w-2/5">
           <h2>Branches</h2>
-          <p>
-            La monture est l’élément centrale d’un paire de lunettes, elle
-            définit sa forme globale.
+          <p class="sectionDesc">
+            Ajuste le matériau des branches de ta paire pour créer un contraste
+            unique ou une harmonie parfaite.
           </p>
           <h3>Matériaux</h3>
           <div></div>
         </section>
       </div>
       <div id="screen3" class="screen justify-end">
-        <section id="section3" class="section w-1/2">
+        <section id="section3" class="section w-2/5">
           <h2>Pont</h2>
-          <p>
-            La monture est l’élément centrale d’un paire de lunettes, elle
-            définit sa forme globale.
+          <p class="sectionDesc">
+            Modifie la largeur du pont pour un confort optimal et un ajustement
+            sur mesure.
           </p>
           <h3>Largeur</h3>
-          <div></div>
+          <div class="flex w-full gap-2 py-2 justify-center">
+            <span>15mm</span>
+            <input
+              type="range"
+              min="15"
+              max="25"
+              value="20"
+              class="range range-primary w-4/5"
+            />
+            <span>25mm</span>
+          </div>
         </section>
       </div>
       <div id="screen4" class="screen justify-start">
         <section id="section4" class="section w-1/2">
           <h2>Verres</h2>
-          <p>
-            La monture est l’élément centrale d’un paire de lunettes, elle
-            définit sa forme globale.
+          <p class="sectionDesc">
+            Choisis la taille et la teinte des verres. Clair, fumé ou coloré,
+            trouve le regard qui te ressemble.
           </p>
           <h3>Taille</h3>
           <div></div>
@@ -83,21 +129,31 @@ import Glass from "../components/Glass.astro";
       <div id="screen5" class="screen justify-end">
         <section id="section5" class="section w-1/2">
           <h2>Gravure</h2>
-          <p>
-            La monture est l’élément centrale d’un paire de lunettes, elle
-            définit sa forme globale.
+          <p class="sectionDesc">
+            Ajoute une touche personnelle, un nom, une date ou un mot précieux.
+            Une gravure qui rend ta paire unique.
           </p>
-          <h3>Texte personnalisé</h3>
+          <h3>Gravure personnalisé</h3>
           <div></div>
         </section>
       </div>
     </div>
   </div>
-  <div id="bottom" class="h-screen flex p-10">
-    <div id="textBottom" class="w-[50%]">
+  <div id="bottom" class="h-screen flex flex-col p-10">
+    <div id="textBottom" class="w-1/2 flex-1">
       <h2>Définis ta paire,<br />définis ton style</h2>
       <p class="text-3xl">
         Personnalise les lunettes qui te correspondent vraiment.
+      </p>
+    </div>
+    <div id="btnBottom" class="flex flex-col gap-4 items-center">
+      <div class="flex gap-2 w-1/2">
+        <button class="btn flex-1">Commander ma paire</button>
+        <button class="btn flex-1 btn-primary">Ajouter à ma galerie</button>
+      </div>
+      <p class="w-1/3 text-center">
+        Tu peux retrouver et modifier les paires que tu à créé à tout moment
+        dans ta galerie.
       </p>
     </div>
   </div>
@@ -129,14 +185,15 @@ import Glass from "../components/Glass.astro";
     // const section5 = document.getElementById("section5");
 
     //other
-    const progress = document.getElementById("progress");
     const arrow = document.getElementById("arrow");
     const textTop = document.getElementById("textTop");
+    const progress = document.getElementById("progress");
+    const progressFill = document.getElementById("progressFill");
     const textBottom = document.getElementById("textBottom");
+    const btnBottom = document.getElementById("btnBottom");
 
     //consts
     const scrubSpeed = 0.5;
-    const showMarkers = false;
 
     //top text and arrow
     gsap.to(textTop, {
@@ -146,7 +203,6 @@ import Glass from "../components/Glass.astro";
         start: "top 0%",
         trigger: top,
         scrub: scrubSpeed,
-        markers: showMarkers,
       },
     });
     gsap.to(arrow, {
@@ -156,11 +212,10 @@ import Glass from "../components/Glass.astro";
         start: "top 0%",
         trigger: top,
         scrub: scrubSpeed,
-        markers: showMarkers,
       },
     });
 
-    //bottom text
+    //bottom text and buttons
     gsap.from(textBottom, {
       opacity: 0,
       scale: 0,
@@ -168,7 +223,15 @@ import Glass from "../components/Glass.astro";
         end: "bottom 100%",
         trigger: bottom,
         scrub: scrubSpeed,
-        markers: showMarkers,
+      },
+    });
+    gsap.from(btnBottom, {
+      opacity: 0,
+      scale: 0,
+      scrollTrigger: {
+        end: "bottom 100%",
+        trigger: bottom,
+        scrub: scrubSpeed,
       },
     });
 
@@ -181,7 +244,6 @@ import Glass from "../components/Glass.astro";
           trigger: section,
           end: "bottom 60%",
           scrub: scrubSpeed,
-          markers: showMarkers,
         },
       });
     });
@@ -194,7 +256,6 @@ import Glass from "../components/Glass.astro";
         end: "bottom 100%",
         trigger: screen1,
         scrub: scrubSpeed,
-        markers: showMarkers,
       },
     });
     gsap.to(progress, {
@@ -204,8 +265,27 @@ import Glass from "../components/Glass.astro";
         start: "bottom 100%",
         trigger: screen5,
         scrub: scrubSpeed,
-        markers: showMarkers,
       },
+    });
+    gsap.to(progressFill, {
+      height: "100%",
+      scrollTrigger: {
+        trigger: screens,
+        start: "top 0%",
+        end: "bottom 0%",
+        scrub: scrubSpeed,
+      },
+    });
+    gsap.utils.toArray(".progressCircle").forEach((circle, index) => {
+      gsap.from(circle, {
+        backgroundColor: "#EBEBEB",
+        scrollTrigger: {
+          trigger: `#screen${index + 1}`,
+          end: "top 39%",
+          start: "top 39%",
+          scrub: scrubSpeed,
+        },
+      });
     });
   </script>
 </Layout>

@@ -47,7 +47,7 @@
 @layer base {
     * {
         @apply font-common text-base;
-        @apply border-1 border-red-500;
+        /* @apply border-1 border-red-500; */
     }
     main {
         @apply p-0;
@@ -56,7 +56,7 @@
         @apply font-header font-extrabold text-8xl;
     }
     h2 {
-        @apply font-header font-bold text-4xl;
+        @apply font-header font-bold text-5xl;
     }
     h3 {
         @apply font-header font-semibold text-3xl;
@@ -69,12 +69,17 @@
     }
     .screen {
         @apply h-screen flex p-4 items-center;
-        /* test gsap */
-        /* @apply opacity-0 scale-0; */
     }
     .section {
         @apply flex flex-col gap-2;
-        /* test gsap */
-        /* @apply opacity-0 scale-0; */
+    }
+    .sectionDesc {
+        @apply text-lg font-medium;
+    }
+    .progressInfo {
+        @apply flex gap-2 items-center -translate-x-6 *:text-lg;
+    }
+    .progressCircle {
+        @apply flex justify-center items-center text-primary-content bg-primary w-10 h-10 rounded-full;
     }
 }
