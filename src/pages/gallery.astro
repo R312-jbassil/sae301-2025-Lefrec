@@ -1,8 +1,100 @@
 ---
 import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
+import Glass from "../components/Glass.astro";
+
+import Pocketbase from "pocketbase";
+const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");
+// const pb = new Pocketbase("http://127.0.0.1:8090");
+
+let token = Astro.cookies.get("pb_auth")?.value;
+
+if (token) {
+  pb.authStore.save(token);
+}
+
+let user = pb.authStore.record;
+
+if (!user && pb.authStore.isValid) {
+  await pb.collection("users").authRefresh();
+  user = pb.authStore.record;
+}
+
+let MatMonture = await pb.collection("MatMonture").getFullList();
+MatMonture.forEach((mat) => {
+  mat.ImageURL = pb.files.getURL(mat, mat.Image, { thumb: "200x200" });
+});
+
+let MatBranche = await pb.collection("MatBranche").getFullList();
+MatBranche.forEach((mat) => {
+  mat.ImageURL = pb.files.getURL(mat, mat.Image, { thumb: "200x200" });
+});
+
+let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
+
+let UserLunettes;
+
+if (pb.authStore.isValid) {
+  UserLunettes = await pb
+    .collection("UserLunettes")
+    .getOne(pb.authStore.record.id);
+}
 ---
 
-<Layout title="TaVue - Ma Galerie">
-  <h1>Ma Galerie</h1>
+<Layout title="TaVue - Ma Galerie" class="relative">
+  <div class="flex flex-col gap-8 min-h-[calc(100vh-74px)] p-10">
+    <h1>Ma Galerie</h1>
+
+    {
+      UserLunettes ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {UserLunettes.Lunettes.map((lunette) => (
+            <div class="rounded-lg shadow-lg p-4 flex flex-col items-center">
+              <Glass
+                MatMonture={MatMonture}
+                MatBranche={MatBranche}
+                TeinteVerre={TeinteVerre}
+                monture={lunette.MatMonture}
+                branche={lunette.MatBranche}
+                verre={lunette.TeinteVerre}
+              />
+
+              <div class="text-center mb-4">
+                <p>
+                  {lunette.MatMonture} et {lunette.MatBranche}
+                </p>
+              </div>
+
+              <div class="flex gap-4">
+                <button class="btn order">Commander</button>
+
+                <a href=`/modify/${lunette.id}` class="btn btn-primary">Modifier</a>
+              </div>
+
+              <p
+                id={`msg-${lunette.id}`}
+                class="text-center text-red-500 text-sm mt-2"
+              />
+            </div>
+          ))}
+          <p id="msg" class="text-center text-red-500 text-sm"></p>
+        </div>
+      ) : (
+        <div class="flex grow justify-center items-center">
+          <p class="text-center text-red-500 text-sm">Hmmmm c'est vide par ici</p>
+        </div>
+      )
+    }
+  </div>
+
+  <script>
+    const orderBtns = document.querySelectorAll(".order");
+    const msg = document.getElementById("msg")
+
+    orderBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        msg.textContent = "Impossible de commander, cette fonctionnalité n'est pas disponible car ce site est un projet étudiant.";
+      })
+    })
+  </script>
 </Layout>

@@ -184,7 +184,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
           </p>
           <h3>Taille</h3>
           <div class="flex w-full gap-2 py-2 justify-center">
-            <span>15mm</span>
+            <span>40mm</span>
             <input
               id="SliderVerre"
               type="range"
@@ -193,7 +193,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
               value="50"
               class="range range-primary w-4/5"
             />
-            <span>25mm</span>
+            <span>60mm</span>
           </div>
           <h3>Teinte</h3>
           <div class="flex gap-2 justify-center items-center">
@@ -281,7 +281,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     let TailleVerre = 50;
     let Gravure = "";
 
-    //details 
+    //details
     const detailMonture = document.getElementById("detailMonture");
     const detailBranche = document.getElementById("detailBranche");
     const detailPont = document.getElementById("detailPont");
@@ -328,7 +328,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
       item.addEventListener("click", (e) => {
         Monture.style.fill = `url(#${item.id}Monture)`;
         MatMonture = item.id;
-        detailMonture.textContent = "Monture en "+MatMonture;
+        detailMonture.textContent = "Monture en " + MatMonture;
       });
     });
 
@@ -361,7 +361,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
         BrancheDroite.style.fill = `url(#${item.id}Branche)`;
         BrancheGauche.style.fill = `url(#${item.id}Branche)`;
         MatBranche = item.id;
-        detailBranche.textContent = "Branches en "+MatBranche;
+        detailBranche.textContent = "Branches en " + MatBranche;
       });
     });
 
@@ -396,7 +396,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
         VerreDroite.style.fill = item.dataset.color;
         VerreGauche.style.fill = item.dataset.color;
         TeinteVerre = item.id;
-        detailTeinteVerre.textContent = "Verres teintés "+TeinteVerre;
+        detailTeinteVerre.textContent = "Verres teintés " + TeinteVerre;
       });
     });
 
@@ -405,7 +405,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
 
     SliderPont.addEventListener("change", (e) => {
       LargeurPont = SliderPont.value;
-      detailPont.textContent = "Pont de "+LargeurPont+"mm";
+      detailPont.textContent = "Pont de " + LargeurPont + "mm";
     });
 
     //Slider Verre________________________________________________________
@@ -413,7 +413,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
 
     SliderVerre.addEventListener("change", (e) => {
       TailleVerre = SliderVerre.value;
-      detailTailleVerre.textContent = "Verres de "+TailleVerre+"mm";
+      detailTailleVerre.textContent = "Verres de " + TailleVerre + "mm";
     });
 
     //Input Gravure_______________________________________________________
@@ -423,7 +423,8 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     GravureButton.addEventListener("click", (e) => {
       Gravure = GravureInput.value;
       console.log(Gravure);
-      detailGravure.textContent = (Gravure == "" ? "Aucun gravure" : "Gravure personnalisée : "+Gravure);
+      detailGravure.textContent =
+        Gravure == "" ? "Aucun gravure" : "Gravure personnalisée : " + Gravure;
     });
 
     //Sauvegarde ________________________________________________________
@@ -442,12 +443,16 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
         msg.textContent = "Tu dois être connecté pour enregistrer une paire.";
       } else {
         try {
-          const idBranche = await pb.collection("NomBranche").getOne(MatBranche);
-          const idMonture = await pb.collection("NomMonture").getOne(MatMonture);
+          const idBranche = await pb
+            .collection("NomBranche")
+            .getOne(MatBranche);
+          const idMonture = await pb
+            .collection("NomMonture")
+            .getOne(MatMonture);
           const idVerre = await pb.collection("NomVerre").getOne(TeinteVerre);
-          console.log("idBranche : "+idBranche.identity);
-          console.log("idMonture : "+idMonture.identity);
-          console.log("idVerre : "+idVerre.identity);
+          console.log("idBranche : " + idBranche.identity);
+          console.log("idMonture : " + idMonture.identity);
+          console.log("idVerre : " + idVerre.identity);
 
           await pb.collection("Lunettes").create({
             LargeurPont: LargeurPont,
@@ -458,11 +463,12 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
             TeinteVerre: idVerre.identity,
             User: pb.authStore.record.id,
           });
-          msg.textContent = "Ta paire de lunettes a bien été enregistrée dans ta galerie";
+          msg.textContent =
+            "Ta paire de lunettes a bien été enregistrée dans ta galerie";
           return;
         } catch (error) {
           console.log(error);
-          msg.textContent = "Échec de l'enregistrement"
+          msg.textContent = "Échec de l'enregistrement";
           return error;
         }
       }
