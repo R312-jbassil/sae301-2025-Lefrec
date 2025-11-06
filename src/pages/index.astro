@@ -5,40 +5,40 @@ import Arrow from "../assets/Arrow.svg";
 import Glass from "../components/Glass.astro";
 
 import Pocketbase from "pocketbase";
-//const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");//
-const pb = new Pocketbase("http://127.0.0.1:8090");
+const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");
+// const pb = new Pocketbase("http://127.0.0.1:8090");
 
 let MatMonture = await pb.collection("MatMonture").getFullList();
 MatMonture.forEach((mat) => {
   mat.ImageURL = pb.files.getURL(mat, mat.Image, { thumb: "200x200" });
 });
-console.log(MatMonture);
 
 let MatBranche = await pb.collection("MatBranche").getFullList();
 MatBranche.forEach((mat) => {
   mat.ImageURL = pb.files.getURL(mat, mat.Image, { thumb: "200x200" });
 });
-console.log(MatBranche);
 
 let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
-console.log(TeinteVerre);
 ---
 
 <Layout title="TaVue - Ta paire, ton style">
   <div id="top" class="h-[calc(100vh-74px)] flex p-10">
-    <div id="textTop" class="w-[50%]">
+    <div id="textTop" class="w-[40%]">
       <h1>Définis ta paire,<br />définis ton style</h1>
       <p class="text-3xl">
         Personnalise les lunettes qui te correspondent vraiment.
       </p>
     </div>
-    <div class="w-[50%] h-[50%] flex items-center">
+    <div
+      id="glassWrapper"
+      class="fixed top-1/2 right-0 -translate-y-1/2 w-[60%] z-1"
+    >
       <Glass
         id="glass"
         MatMonture={MatMonture}
         MatBranche={MatBranche}
         TeinteVerre={TeinteVerre}
-        monture="Carbone"
+        monture="Plastique"
         branche="Noyer"
         verre="Charbon"
       />
@@ -102,17 +102,19 @@ console.log(TeinteVerre);
           </p>
           <h3>Matériaux</h3>
           <div class="flex gap-2 justify-center items-center">
-            <Arrow id="MatMontureArrowLeft" class="fill-(--color-primary) rotate-90" />
-            <div
-              class="carousel"
-            >
+            <div id="MatMontureArrowLeft" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) origin-center rotate-90" />
+            </div>
+            <div id="MatMontureCarousel" class=`carousel`>
               {
                 MatMonture.map((mat) => (
-                  <img src={mat.ImageURL} alt="" class="carouselItem">
+                  <img src={mat.ImageURL} alt="" class="carouselItem" />
                 ))
               }
             </div>
-            <Arrow id="MatMontureArrowRight" class="fill-(--color-primary) rotate-270" />
+            <div id="MatMontureArrowRight" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) rotate-270" />
+            </div>
           </div>
         </section>
       </div>
@@ -193,12 +195,36 @@ console.log(TeinteVerre);
     </div>
   </div>
 
-  //script de personnalisation
+  <!-- script de personnalisation -->
   <script>
-    
+    import Pocketbase from "pocketbase";
+    const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");
+    //const pb = new Pocketbase("http://127.0.0.1:8090");//
+
+    const MatMontureCarousel = document.getElementById("MatMontureCarousel");
+    const MatMontureArrowLeft = document.getElementById("MatMontureArrowLeft");
+    const MatMontureArrowRight = document.getElementById(
+      "MatMontureArrowRight"
+    );
+
+    const scrollAmount = 96;
+
+    MatMontureArrowLeft?.addEventListener("click", (e) => {
+      MatMontureCarousel?.scrollBy({
+        left: -scrollAmount,
+        behavior: "smooth",
+      });
+    });
+
+    MatMontureArrowRight?.addEventListener("click", (e) => {
+      MatMontureCarousel?.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    });
   </script>
 
-  //script d'animation
+  <!-- script d'animation -->
   <script>
     import { gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -225,9 +251,56 @@ console.log(TeinteVerre);
     const progressFill = document.getElementById("progressFill");
     const textBottom = document.getElementById("textBottom");
     const btnBottom = document.getElementById("btnBottom");
+    const glassWrapper = document.getElementById("glassWrapper");
 
     //consts
     const scrubSpeed = 0.5;
+
+    //Glass
+    gsap.to(glassWrapper, {
+      scale: 0.8,
+      xPercent: 10,
+      scrollTrigger: {
+        end: "bottom 100%",
+        trigger: screen1,
+        scrub: true,
+      },
+    });
+    gsap.to(glassWrapper, {
+      xPercent: -50,
+      scrollTrigger: {
+        end: "bottom 100%",
+        trigger: screen2,
+        scrub: true,
+      },
+    });
+    gsap.to(glassWrapper, {
+      scale: 1,
+      xPercent: 30,
+      scrollTrigger: {
+        end: "bottom 100%",
+        trigger: screen4,
+        scrub: true,
+      },
+    });
+    gsap.to(glassWrapper, {
+      scale: 0.7,
+      xPercent: -60,
+      scrollTrigger: {
+        end: "bottom 100%",
+        trigger: screen5,
+        scrub: true,
+      },
+    });
+    gsap.to(glassWrapper, {
+      scale: 1,
+      xPercent: 0,
+      scrollTrigger: {
+        end: "bottom 100%",
+        trigger: bottom,
+        scrub: true,
+      },
+    });
 
     //top text and arrow
     gsap.to(textTop, {
