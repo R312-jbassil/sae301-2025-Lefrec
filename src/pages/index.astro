@@ -227,8 +227,14 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
           </p>
           <h3>Gravure personnalisé</h3>
           <div class="flex w-full gap-2 py-2 justify-center">
-            <input id="GravureInput" type="text" placeholder="Ton texte personnalisé" class="input" />
-            <button id="GravureButton" class="btn btn-primary">Appliquer</button>
+            <input
+              id="GravureInput"
+              type="text"
+              placeholder="Ton texte personnalisé"
+              class="input"
+            />
+            <button id="GravureButton" class="btn btn-primary">Appliquer</button
+            >
           </div>
         </section>
       </div>
@@ -243,9 +249,12 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     </div>
     <div id="btnBottom" class="flex flex-col gap-4 items-center">
       <div class="flex gap-2 w-1/2">
-        <button class="btn flex-1">Commander ma paire</button>
-        <button class="btn flex-1 btn-primary">Ajouter à ma galerie</button>
+        <button id="OrderButton" class="btn flex-1">Commander ma paire</button>
+        <button id="SaveButton" class="btn flex-1 btn-primary"
+          >Ajouter à ma galerie</button
+        >
       </div>
+      <p id="msg" class="text-center text-red-500 text-sm"></p>
       <p class="w-1/3 text-center">
         Tu peux retrouver et modifier les paires que tu à créé à tout moment
         dans ta galerie.
@@ -399,16 +408,32 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
       console.log("TailleVerre : " + TailleVerre);
     });
 
-
     //Input Gravure_______________________________________________________
     const GravureInput = document.getElementById("GravureInput");
     const GravureButton = document.getElementById("GravureButton");
 
     GravureButton.addEventListener("click", (e) => {
-      console.log("Input value : "+GravureInput.value);
+      console.log("Input value : " + GravureInput.value);
       Gravure = GravureInput.value;
-      console.log("Gravure : "+GravureInput.value);
-    })
+      console.log("Gravure : " + GravureInput.value);
+    });
+
+    //Sauvegarde ________________________________________________________
+    const msg = document.getElementById("msg");
+
+    const OrderButton = document.getElementById("OrderButton");
+    const SaveButton = document.getElementById("SaveButton");
+
+    OrderButton.addEventListener("click", (e) => {
+      msg.textContent =
+        "Impossible de commander, cette fonctionnalité n'est pas disponible car ce site est un projet étudiant.";
+    });
+
+    SaveButton?.addEventListener("click", (e) => {
+      if (!pb.authStore.isValid) {
+        msg.textContent = "Tu dois être connecté pour enregistrer une paire.";
+      }
+    });
   </script>
 
   <!-- script d'animation -->
@@ -447,61 +472,92 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
       scale: 0.8,
       xPercent: 10,
       y: "100vh",
-      yPercent: -20,
       scrollTrigger: {
         end: "bottom 100%",
         trigger: screen1,
         scrub: true,
+        markers: true,
       },
     });
-    gsap.to(glassWrapper, {
-      xPercent: -50,
-      y: "200vh",
-      scrollTrigger: {
-        end: "bottom 100%",
-        trigger: screen2,
-        scrub: true,
-      },
-    });
-    gsap.to(glassWrapper, {
-      y: "300vh",
-      scrollTrigger: {
-        end: "bottom 100%",
-        trigger: screen3,
-        scrub: true,
-      },
-    });
-    gsap.to(glassWrapper, {
-      scale: 1,
-      xPercent: 30,
-      y: "400vh",
-      scrollTrigger: {
-        end: "bottom 100%",
-        trigger: screen4,
-        scrub: true,
-      },
-    });
-    gsap.to(glassWrapper, {
-      scale: 0.7,
-      xPercent: -60,
-      y: "500vh",
-      scrollTrigger: {
-        end: "bottom 100%",
-        trigger: screen5,
-        scrub: true,
-      },
-    });
-    gsap.to(glassWrapper, {
-      scale: 1,
-      xPercent: 0,
-      y: "600vh",
-      yPercent: -50,
-      scrollTrigger: {
-        end: "bottom 100%",
-        trigger: bottom,
-        scrub: true,
-      },
-    });
+    gsap.fromTo(
+      glassWrapper,
+      { scale: 0.8, xPercent: 10, y: "100vh" },
+      {
+        xPercent: -50,
+        y: "200vh",
+        immediateRender: false,
+        scrollTrigger: {
+          start: "top 80%",
+          end: "bottom 100%",
+          trigger: screen2,
+          scrub: true,
+          markers: true,
+        },
+      }
+    );
+    gsap.fromTo(
+      glassWrapper,
+      { scale: 0.8, xPercent: -50, y: "200vh" },
+      {
+        y: "300vh",
+        immediateRender: false,
+        scrollTrigger: {
+          start: "top 80%",
+          end: "bottom 100%",
+          trigger: screen3,
+          scrub: true,
+        },
+      }
+    );
+    gsap.fromTo(
+      glassWrapper,
+      { scale: 0.8, xPercent: -50, y: "300vh" },
+      {
+        scale: 1,
+        xPercent: 30,
+        y: "400vh",
+        immediateRender: false,
+        scrollTrigger: {
+          start: "top 80%",
+          end: "bottom 100%",
+          trigger: screen4,
+          scrub: true,
+        },
+      }
+    );
+    gsap.fromTo(
+      glassWrapper,
+      { scale: 1, xPercent: 30, y: "400vh" },
+      {
+        scale: 0.7,
+        xPercent: -60,
+        y: "500vh",
+        immediateRender: false,
+        scrollTrigger: {
+          start: "top 80%",
+          end: "bottom 100%",
+          trigger: screen5,
+          scrub: true,
+        },
+      }
+    );
+    gsap.fromTo(
+      glassWrapper,
+      { scale: 0.7, xPercent: -60, y: "500vh" },
+      {
+        scale: 1,
+        xPercent: 0,
+        y: "600vh",
+        yPercent: -50,
+        immediateRender: false,
+        scrollTrigger: {
+          start: "top 80%",
+          end: "bottom 100%",
+          trigger: bottom,
+          scrub: true,
+        },
+      }
+    );
 
     //top text and arrow
     gsap.to(textTop, {
