@@ -21,7 +21,7 @@ MatBranche.forEach((mat) => {
 let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
 ---
 
-<Layout title="TaVue - Ta paire, ton style">
+<Layout title="TaVue - Ta paire, ton style" class="relative">
   <div id="top" class="h-[calc(100vh-74px)] flex p-10">
     <div id="textTop" class="w-[40%]">
       <h1>Définis ta paire,<br />définis ton style</h1>
@@ -31,7 +31,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     </div>
     <div
       id="glassWrapper"
-      class="fixed top-1/2 right-0 -translate-y-1/2 w-[60%] z-1"
+      class="absolute top-1/2 right-0 -translate-y-1/2 w-[60%] z-1"
     >
       <Glass
         id="glass"
@@ -237,7 +237,6 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     const bottom = document.getElementById("bottom");
 
     //screens
-    const screens = document.getElementById("screens");
     const screen1 = document.getElementById("screen1");
     const screen2 = document.getElementById("screen2");
     const screen3 = document.getElementById("screen3");
@@ -260,6 +259,8 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     gsap.to(glassWrapper, {
       scale: 0.8,
       xPercent: 10,
+      y: "100vh",
+      yPercent: -20,
       scrollTrigger: {
         end: "bottom 100%",
         trigger: screen1,
@@ -268,6 +269,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     });
     gsap.to(glassWrapper, {
       xPercent: -50,
+      y: "200vh",
       scrollTrigger: {
         end: "bottom 100%",
         trigger: screen2,
@@ -275,8 +277,17 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
       },
     });
     gsap.to(glassWrapper, {
+      y: "300vh",
+      scrollTrigger: {
+        end: "bottom 100%",
+        trigger: screen3,
+        scrub: true,
+      },
+    });
+    gsap.to(glassWrapper, {
       scale: 1,
       xPercent: 30,
+      y: "400vh",
       scrollTrigger: {
         end: "bottom 100%",
         trigger: screen4,
@@ -286,6 +297,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     gsap.to(glassWrapper, {
       scale: 0.7,
       xPercent: -60,
+      y: "500vh",
       scrollTrigger: {
         end: "bottom 100%",
         trigger: screen5,
@@ -295,6 +307,8 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     gsap.to(glassWrapper, {
       scale: 1,
       xPercent: 0,
+      y: "600vh",
+      yPercent: -50,
       scrollTrigger: {
         end: "bottom 100%",
         trigger: bottom,
@@ -377,7 +391,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     gsap.to(progressFill, {
       height: "100%",
       scrollTrigger: {
-        trigger: screens,
+        trigger: mid,
         start: "top 0%",
         end: "bottom 0%",
         scrub: scrubSpeed,
