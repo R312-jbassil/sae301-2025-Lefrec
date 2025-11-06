@@ -184,7 +184,26 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
           <h3>Taille</h3>
           <div></div>
           <h3>Teinte</h3>
-          <div></div>
+          <div class="flex gap-2 justify-center items-center">
+            <div id="TeinteVerreArrowLeft" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) origin-center rotate-90" />
+            </div>
+            <div id="TeinteVerreCarousel" class=`carousel`>
+              {
+                TeinteVerre.map((teinte) => (
+                  <div
+                    id={teinte.Nom}
+                    class="carouselItem opacity-75"
+                    style={`background-color: ${teinte.Couleur};`}
+                    data-color={teinte.Couleur}
+                  />
+                ))
+              }
+            </div>
+            <div id="TeinteVerreArrowRight" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) rotate-270" />
+            </div>
+          </div>
         </section>
       </div>
       <div id="screen5" class="screen justify-end">
@@ -237,7 +256,8 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     const BrancheGauche = document.getElementById("brancheGauche");
     const VerreDroite = document.getElementById("verreDroite");
     const VerreGauche = document.getElementById("verreGauche");
-    console.log(Monture)
+    console.log(VerreDroite);
+    console.log(VerreGauche);
 
     //carousels Monture_______________________________________________________
 
@@ -266,10 +286,10 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
 
     MatMontureItems.forEach((item) => {
       item.addEventListener("click", (e) => {
-        console.log("Id de l'item : "+item.id);
+        console.log("Id de l'item : " + item.id);
         Monture.style.fill = `url(#${item.id}Monture)`;
         MatMonture = item.id;
-        console.log("MatMonture : "+MatMonture);
+        console.log("MatMonture : " + MatMonture);
       });
     });
 
@@ -299,11 +319,52 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
 
     MatBrancheItems.forEach((item) => {
       item.addEventListener("click", (e) => {
-        console.log("Id de l'item : "+item.id);
+        console.log("Id de l'item : " + item.id);
         BrancheDroite.style.fill = `url(#${item.id}Branche)`;
         BrancheGauche.style.fill = `url(#${item.id}Branche)`;
         MatBranche = item.id;
-        console.log("MatMonture : "+MatBranche);
+        console.log("MatMonture : " + MatBranche);
+      });
+    });
+
+    //carousels teintes_______________________________________________________
+
+    const TeinteVerreCarousel = document.getElementById("TeinteVerreCarousel");
+    const TeinteVerreArrowLeft = document.getElementById(
+      "TeinteVerreArrowLeft"
+    );
+    const TeinteVerreArrowRight = document.getElementById(
+      "TeinteVerreArrowRight"
+    );
+    //handle scrolling
+    TeinteVerreArrowLeft?.addEventListener("click", (e) => {
+      TeinteVerreCarousel?.scrollBy({
+        left: -scrollAmount,
+        behavior: "smooth",
+      });
+    });
+    TeinteVerreArrowRight?.addEventListener("click", (e) => {
+      TeinteVerreCarousel?.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    });
+
+    const TeinteVerreItems = Array.from(TeinteVerreCarousel?.children);
+    console.log(TeinteVerreItems);
+
+    function getCouleur(Nom) {
+      const teinte = TeinteVerre.find((teinte) => teinte.Nom === Nom);
+      return teinte.Couleur;
+    }
+
+    TeinteVerreItems.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        console.log("Id de l'item : " + item.id);
+        VerreDroite.style.fill = item.dataset.color;
+        VerreGauche.style.fill = item.dataset.color;
+        TeinteVerre = item.id;
+        console.log("TeinteVerre : " + TeinteVerre);
       });
     });
   </script>
