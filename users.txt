@@ -3,3 +3,10 @@ Logins du pocketbase :
 super user :
 paolo.vincent@edu.univ-fcomte.fr
 totototototo
+
+users :
+toto@toto.toto
+totototototo
+
+blackfox244@gmail.com
+totototototo
