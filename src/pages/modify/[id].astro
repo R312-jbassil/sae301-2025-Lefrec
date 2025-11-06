@@ -1,7 +1,7 @@
 ---
 import "../../styles/global.css";
 import Layout from "../../layouts/Layout.astro";
-import Arrow from "../assets/Arrow.svg";
+import Arrow from "../../assets/Arrow.svg";
 import Glass from "../../components/Glass.astro";
 
 const { id } = Astro.params;
@@ -9,6 +9,11 @@ const { id } = Astro.params;
 import Pocketbase from "pocketbase";
 const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");
 // const pb = new Pocketbase("http://127.0.0.1:8090");
+
+const lunette = await pb
+  .collection("Lunettes")
+  .getOne(id, { expand: "MatBranche, MatMonture, TeinteVerre" });
+console.log(lunette);
 
 let MatMonture = await pb.collection("MatMonture").getFullList();
 MatMonture.forEach((mat) => {
@@ -22,3 +27,690 @@ MatBranche.forEach((mat) => {
 
 let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
 ---
+
+<Layout title="TaVue - Ta paire, ton style" class="relative">
+  <div id="top" class="h-[calc(100vh-74px)] flex p-10">
+    <div id="textTop" class="w-[40%]">
+      <h1>(Re)définis ta paire,<br />(re)définis ton style</h1>
+      <p class="text-3xl">
+        Personnalise les lunettes qui te correspondent vraiment.
+      </p>
+    </div>
+    <div
+      id="glassWrapper"
+      class="absolute top-1/2 right-0 -translate-y-1/2 w-[60%] z-1"
+    >
+      <Glass
+        id="glass"
+        MatMonture={MatMonture}
+        MatBranche={MatBranche}
+        TeinteVerre={TeinteVerre}
+        monture={lunette.expand.MatMonture.Nom}
+        branche={lunette.expand.MatBranche.Nom}
+        verre={lunette.expand.TeinteVerre.Nom}
+      />
+    </div>
+    <div
+      id="arrow"
+      class="absolute w-[70px] h-[70px] rounded-full bg-primary flex justify-center items-center bottom-[10%] left-[50%]"
+    >
+      <Arrow class="fill-white" />
+    </div>
+  </div>
+  <div id="mid" class="flex relative">
+    <div
+      id="progress"
+      class="sticky top-0 h-screen flex px-10 justify-center items-center"
+    >
+      <div class="h-1/2 w-2 bg-base-300">
+        <div id="progressFill" class="w-full h-0 bg-primary"></div>
+      </div>
+      <div class="flex flex-col h-1/2 justify-between">
+        <div class="progressInfo">
+          <div class="progressCircle">
+            <span>1</span>
+          </div>
+          <span>Monture</span>
+        </div>
+        <div class="progressInfo">
+          <div class="progressCircle">
+            <span>2</span>
+          </div>
+          <span>Branches</span>
+        </div>
+        <div class="progressInfo">
+          <div class="progressCircle">
+            <span>3</span>
+          </div>
+          <span>Pont</span>
+        </div>
+        <div class="progressInfo">
+          <div class="progressCircle">
+            <span>4</span>
+          </div>
+          <span>Verres</span>
+        </div>
+        <div class="progressInfo">
+          <div class="progressCircle">
+            <span>5</span>
+          </div>
+          <span>Gravure</span>
+        </div>
+      </div>
+    </div>
+    <div id="screens" class="flex-1">
+      <div id="screen1" class="screen justify-start">
+        <section id="section1" class="section w-2/5">
+          <h2>Monture</h2>
+          <p class="sectionDesc">
+            La monture est l’élément centrale d’un paire de lunettes, elle
+            définit sa forme globale. Sélectionne le matériau qui reflète ton
+            style. Élégance, légéreté ou audace, à toi de choisir.
+          </p>
+          <h3>Matériau</h3>
+          <div class="flex gap-2 justify-center items-center">
+            <div id="MatMontureArrowLeft" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) origin-center rotate-90" />
+            </div>
+            <div id="MatMontureCarousel" class=`carousel`>
+              {
+                MatMonture.map((mat) => (
+                  <img
+                    id={mat.Nom}
+                    src={mat.ImageURL}
+                    alt=""
+                    class="carouselItem"
+                  />
+                ))
+              }
+            </div>
+            <div id="MatMontureArrowRight" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) rotate-270" />
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="screen2" class="screen justify-end">
+        <section id="section2" class="section w-2/5">
+          <h2>Branches</h2>
+          <p class="sectionDesc">
+            Ajuste le matériau des branches de ta paire pour créer un contraste
+            unique ou une harmonie parfaite.
+          </p>
+          <h3>Matériau</h3>
+          <div class="flex gap-2 justify-center items-center">
+            <div id="MatBrancheArrowLeft" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) origin-center rotate-90" />
+            </div>
+            <div id="MatBrancheCarousel" class=`carousel`>
+              {
+                MatBranche.map((mat) => (
+                  <img
+                    id={mat.Nom}
+                    src={mat.ImageURL}
+                    alt=""
+                    class="carouselItem"
+                  />
+                ))
+              }
+            </div>
+            <div id="MatBrancheArrowRight" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) rotate-270" />
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="screen3" class="screen justify-end">
+        <section id="section3" class="section w-2/5">
+          <h2>Pont</h2>
+          <p class="sectionDesc">
+            Modifie la largeur du pont pour un confort optimal et un ajustement
+            sur mesure.
+          </p>
+          <h3>Largeur</h3>
+          <div class="flex w-full gap-2 py-2 justify-center">
+            <span>15mm</span>
+            <input
+              id="SliderPont"
+              type="range"
+              min="15"
+              max="25"
+              value={lunette.LargeurPont}
+              class="range range-primary w-4/5"
+            />
+            <span>25mm</span>
+          </div>
+        </section>
+      </div>
+      <div id="screen4" class="screen justify-start">
+        <section id="section4" class="section w-1/2">
+          <h2>Verres</h2>
+          <p class="sectionDesc">
+            Choisis la taille et la teinte des verres. Clair, fumé ou coloré,
+            trouve le regard qui te ressemble.
+          </p>
+          <h3>Taille</h3>
+          <div class="flex w-full gap-2 py-2 justify-center">
+            <span>40mm</span>
+            <input
+              id="SliderVerre"
+              type="range"
+              min="40"
+              max="60"
+              value={lunette.TailleVerre}
+              class="range range-primary w-4/5"
+            />
+            <span>60mm</span>
+          </div>
+          <h3>Teinte</h3>
+          <div class="flex gap-2 justify-center items-center">
+            <div id="TeinteVerreArrowLeft" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) origin-center rotate-90" />
+            </div>
+            <div id="TeinteVerreCarousel" class=`carousel`>
+              {
+                TeinteVerre.map((teinte) => (
+                  <div
+                    id={teinte.Nom}
+                    class="carouselItem opacity-75"
+                    style={`background-color: ${teinte.Couleur};`}
+                    data-color={teinte.Couleur}
+                  />
+                ))
+              }
+            </div>
+            <div id="TeinteVerreArrowRight" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) rotate-270" />
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="screen5" class="screen justify-end">
+        <section id="section5" class="section w-1/2">
+          <h2>Gravure</h2>
+          <p class="sectionDesc">
+            Ajoute une touche personnelle, un nom, une date ou un mot précieux.
+            Une gravure qui rend ta paire unique.
+          </p>
+          <h3>Gravure personnalisé</h3>
+          <div class="flex w-full gap-2 py-2 justify-center">
+            <input
+              id="GravureInput"
+              type="text"
+              placeholder="Ton texte personnalisé"
+              value={lunette.Gravure}
+              class="input"
+            />
+            <button id="GravureButton" class="btn btn-primary">Appliquer</button
+            >
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div id="bottom" class="h-screen flex flex-col p-10">
+    <div id="textBottom" class="w-1/2 flex-1">
+      <h2 class="text-8xl">Ta paire,<br />ton style</h2>
+      <div>
+        <p id="detailMonture">Monture {lunette.expand.MatMonture.Nom}</p>
+        <p id="detailBranche">Branche en {lunette.expand.MatBranche.Nom}</p>
+        <p id="detailPont">Pont de {lunette.LargeurPont}mm</p>
+        <p id="detailTeinteVerre">Verres teintés {lunette.expand.TeinteVerre.Nom}</p>
+        <p id="detailTailleVerre">Verres de {lunette.TailleVerre}mm</p>
+        <p id="detailGravure">{lunette.Gravure}</p>
+      </div>
+    </div>
+    <div id="btnBottom" class="flex flex-col gap-4 items-center">
+      <div class="flex gap-2 w-1/2">
+        <button id="OrderButton" class="btn flex-1">Commander ma paire</button>
+        <button id="SaveButton" class="btn flex-1 btn-primary"
+          >Sauvegarder les modifications</button
+        >
+      </div>
+      <p id="msg" class="text-center text-red-500 text-sm"></p>
+      <p class="w-1/3 text-center">
+        Tu peux retrouver et modifier les paires que tu à créé à tout moment
+        dans ta galerie.
+      </p>
+    </div>
+  </div>
+
+  <!-- script de personnalisation -->
+  <script>
+    console.log(location.href.split("/").at(-1))
+    const id = location.href.split("/").at(-1)
+
+    import Pocketbase from "pocketbase";
+    const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");
+    //const pb = new Pocketbase("http://127.0.0.1:8090");//
+
+    const lunette = await pb
+      .collection("Lunettes")
+      .getOne(id, { expand: "MatBranche, MatMonture, TeinteVerre" });
+    console.log(lunette);
+
+    //Valeurs à enregistrer
+    let MatMonture = lunette.expand.MatMonture.Nom;
+    let MatBranche = lunette.expand.MatBranche.Nom;
+    let TeinteVerre = lunette.expand.TeinteVerre.Nom;
+    let LargeurPont = lunette.LargeurPont;
+    let TailleVerre = lunette.TailleVerre;
+    let Gravure = lunette.Gravure;
+
+    //details
+    const detailMonture = document.getElementById("detailMonture");
+    const detailBranche = document.getElementById("detailBranche");
+    const detailPont = document.getElementById("detailPont");
+    const detailTeinteVerre = document.getElementById("detailTeinteVerre");
+    const detailTailleVerre = document.getElementById("detailTailleVerre");
+    const detailgravure = document.getElementById("detailgravure");
+
+    //elements de glass
+    const Glass = document.getElementById("glass");
+    const Monture = document.getElementById("monture");
+    const BrancheDroite = document.getElementById("brancheDroite");
+    const BrancheGauche = document.getElementById("brancheGauche");
+    const VerreDroite = document.getElementById("verreDroite");
+    const VerreGauche = document.getElementById("verreGauche");
+    console.log(VerreDroite);
+    console.log(VerreGauche);
+
+    //carousels Monture_______________________________________________________
+
+    const MatMontureCarousel = document.getElementById("MatMontureCarousel");
+    const MatMontureArrowLeft = document.getElementById("MatMontureArrowLeft");
+    const MatMontureArrowRight = document.getElementById(
+      "MatMontureArrowRight"
+    );
+    //handle scrolling
+    const scrollAmount = 96;
+    MatMontureArrowLeft?.addEventListener("click", (e) => {
+      MatMontureCarousel?.scrollBy({
+        left: -scrollAmount,
+        behavior: "smooth",
+      });
+    });
+    MatMontureArrowRight?.addEventListener("click", (e) => {
+      MatMontureCarousel?.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    });
+
+    const MatMontureItems = Array.from(MatMontureCarousel?.children);
+    console.log(MatMontureItems);
+
+    MatMontureItems.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        Monture.style.fill = `url(#${item.id}Monture)`;
+        MatMonture = item.id;
+        detailMonture.textContent = "Monture en " + MatMonture;
+      });
+    });
+
+    //carousels branche_______________________________________________________
+
+    const MatBrancheCarousel = document.getElementById("MatBrancheCarousel");
+    const MatBrancheArrowLeft = document.getElementById("MatBrancheArrowLeft");
+    const MatBrancheArrowRight = document.getElementById(
+      "MatBrancheArrowRight"
+    );
+    //handle scrolling
+    MatBrancheArrowLeft?.addEventListener("click", (e) => {
+      MatBrancheCarousel?.scrollBy({
+        left: -scrollAmount,
+        behavior: "smooth",
+      });
+    });
+    MatBrancheArrowRight?.addEventListener("click", (e) => {
+      MatBrancheCarousel?.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    });
+
+    const MatBrancheItems = Array.from(MatBrancheCarousel?.children);
+    console.log(MatBrancheItems);
+
+    MatBrancheItems.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        BrancheDroite.style.fill = `url(#${item.id}Branche)`;
+        BrancheGauche.style.fill = `url(#${item.id}Branche)`;
+        MatBranche = item.id;
+        detailBranche.textContent = "Branches en " + MatBranche;
+      });
+    });
+
+    //carousels teintes_______________________________________________________
+
+    const TeinteVerreCarousel = document.getElementById("TeinteVerreCarousel");
+    const TeinteVerreArrowLeft = document.getElementById(
+      "TeinteVerreArrowLeft"
+    );
+    const TeinteVerreArrowRight = document.getElementById(
+      "TeinteVerreArrowRight"
+    );
+    //handle scrolling
+    TeinteVerreArrowLeft?.addEventListener("click", (e) => {
+      TeinteVerreCarousel?.scrollBy({
+        left: -scrollAmount,
+        behavior: "smooth",
+      });
+    });
+    TeinteVerreArrowRight?.addEventListener("click", (e) => {
+      TeinteVerreCarousel?.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    });
+
+    const TeinteVerreItems = Array.from(TeinteVerreCarousel?.children);
+    console.log(TeinteVerreItems);
+
+    TeinteVerreItems.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        VerreDroite.style.fill = item.dataset.color;
+        VerreGauche.style.fill = item.dataset.color;
+        TeinteVerre = item.id;
+        detailTeinteVerre.textContent = "Verres teintés " + TeinteVerre;
+      });
+    });
+
+    //Slider Pont________________________________________________________
+    const SliderPont = document.getElementById("SliderPont");
+
+    SliderPont.addEventListener("change", (e) => {
+      LargeurPont = SliderPont.value;
+      detailPont.textContent = "Pont de " + LargeurPont + "mm";
+    });
+
+    //Slider Verre________________________________________________________
+    const SliderVerre = document.getElementById("SliderVerre");
+
+    SliderVerre.addEventListener("change", (e) => {
+      TailleVerre = SliderVerre.value;
+      detailTailleVerre.textContent = "Verres de " + TailleVerre + "mm";
+    });
+
+    //Input Gravure_______________________________________________________
+    const GravureInput = document.getElementById("GravureInput");
+    const GravureButton = document.getElementById("GravureButton");
+
+    GravureButton.addEventListener("click", (e) => {
+      Gravure = GravureInput.value;
+      console.log(Gravure);
+      detailGravure.textContent =
+        Gravure == "" ? "Aucun gravure" : "Gravure personnalisée : " + Gravure;
+    });
+
+    //Sauvegarde ________________________________________________________
+    const msg = document.getElementById("msg");
+
+    const OrderButton = document.getElementById("OrderButton");
+    const SaveButton = document.getElementById("SaveButton");
+
+    OrderButton.addEventListener("click", (e) => {
+      msg.textContent =
+        "Impossible de commander, cette fonctionnalité n'est pas disponible car ce site est un projet étudiant.";
+    });
+
+    SaveButton.addEventListener("click", async (e) => {
+      if (!pb.authStore.isValid) {
+        msg.textContent = "Tu dois être connecté pour enregistrer une paire.";
+      } else {
+        try {
+          const idBranche = await pb
+            .collection("NomBranche")
+            .getOne(MatBranche);
+          const idMonture = await pb
+            .collection("NomMonture")
+            .getOne(MatMonture);
+          const idVerre = await pb.collection("NomVerre").getOne(TeinteVerre);
+          console.log("idBranche : " + idBranche.identity);
+          console.log("idMonture : " + idMonture.identity);
+          console.log("idVerre : " + idVerre.identity);
+
+          await pb.collection("Lunettes").update(id, {
+            LargeurPont: LargeurPont,
+            TailleVerre: TailleVerre,
+            Gravure: Gravure,
+            MatBranche: idBranche.identity,
+            MatMonture: idMonture.identity,
+            TeinteVerre: idVerre.identity,
+          });
+          msg.textContent =
+            "Tes modifications ont bien été sauvegardées";
+          return;
+        } catch (error) {
+          console.log(error);
+          msg.textContent = "Échec des modifications";
+          return error;
+        }
+      }
+    });
+  </script>
+
+  <!-- script d'animation -->
+  <script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    //main parts
+    const top = document.getElementById("top");
+    const mid = document.getElementById("mid");
+    const bottom = document.getElementById("bottom");
+
+    //screens
+    const screen1 = document.getElementById("screen1");
+    const screen2 = document.getElementById("screen2");
+    const screen3 = document.getElementById("screen3");
+    const screen4 = document.getElementById("screen4");
+    const screen5 = document.getElementById("screen5");
+
+    //other
+    const arrow = document.getElementById("arrow");
+    const textTop = document.getElementById("textTop");
+    const progress = document.getElementById("progress");
+    const progressFill = document.getElementById("progressFill");
+    const textBottom = document.getElementById("textBottom");
+    const btnBottom = document.getElementById("btnBottom");
+    const glassWrapper = document.getElementById("glassWrapper");
+
+    //consts
+    const scrubSpeed = 0.5;
+
+    //Glass
+    gsap.to(glassWrapper, {
+      scale: 0.8,
+      xPercent: 10,
+      y: "100vh",
+      scrollTrigger: {
+        end: "bottom 100%",
+        trigger: screen1,
+        scrub: true,
+      },
+    });
+    gsap.fromTo(
+      glassWrapper,
+      { scale: 0.8, xPercent: 10, y: "100vh" },
+      {
+        xPercent: -50,
+        y: "200vh",
+        immediateRender: false,
+        scrollTrigger: {
+          start: "top 80%",
+          end: "bottom 100%",
+          trigger: screen2,
+          scrub: true,
+        },
+      }
+    );
+    gsap.fromTo(
+      glassWrapper,
+      { scale: 0.8, xPercent: -50, y: "200vh" },
+      {
+        y: "300vh",
+        immediateRender: false,
+        scrollTrigger: {
+          start: "top 80%",
+          end: "bottom 100%",
+          trigger: screen3,
+          scrub: true,
+        },
+      }
+    );
+    gsap.fromTo(
+      glassWrapper,
+      { scale: 0.8, xPercent: -50, y: "300vh" },
+      {
+        scale: 1,
+        xPercent: 30,
+        y: "400vh",
+        immediateRender: false,
+        scrollTrigger: {
+          start: "top 80%",
+          end: "bottom 100%",
+          trigger: screen4,
+          scrub: true,
+        },
+      }
+    );
+    gsap.fromTo(
+      glassWrapper,
+      { scale: 1, xPercent: 30, y: "400vh" },
+      {
+        scale: 0.7,
+        xPercent: -60,
+        y: "500vh",
+        immediateRender: false,
+        scrollTrigger: {
+          start: "top 80%",
+          end: "bottom 100%",
+          trigger: screen5,
+          scrub: true,
+        },
+      }
+    );
+    gsap.fromTo(
+      glassWrapper,
+      { scale: 0.7, xPercent: -60, y: "500vh" },
+      {
+        scale: 1,
+        xPercent: 0,
+        y: "600vh",
+        yPercent: -50,
+        immediateRender: false,
+        scrollTrigger: {
+          start: "top 80%",
+          end: "bottom 100%",
+          trigger: bottom,
+          scrub: true,
+        },
+      }
+    );
+
+    //top text and arrow
+    gsap.to(textTop, {
+      opacity: 0,
+      scale: 0,
+      scrollTrigger: {
+        start: "top 0%",
+        trigger: top,
+        scrub: scrubSpeed,
+      },
+    });
+    gsap.to(arrow, {
+      opacity: 0,
+      scale: 0,
+      scrollTrigger: {
+        start: "top 0%",
+        trigger: top,
+        scrub: scrubSpeed,
+      },
+    });
+
+    //bottom text and buttons
+    gsap.from(textBottom, {
+      opacity: 0,
+      scale: 0,
+      scrollTrigger: {
+        end: "bottom 100%",
+        trigger: bottom,
+        scrub: scrubSpeed,
+      },
+    });
+    gsap.from(btnBottom, {
+      opacity: 0,
+      scale: 0,
+      scrollTrigger: {
+        end: "bottom 100%",
+        trigger: bottom,
+        scrub: scrubSpeed,
+      },
+    });
+
+    //section fade in
+    gsap.utils.toArray(".section").forEach((section) => {
+      gsap.from(section, {
+        opacity: 0,
+        scale: 0,
+        scrollTrigger: {
+          trigger: section,
+          end: "bottom 60%",
+          scrub: scrubSpeed,
+        },
+      });
+    });
+
+    //progress slide in/out
+    gsap.fromTo(
+      progress,
+      { opacity: 0, xPercent: -100 },
+      {
+        opacity: 1,
+        xPercent: 0,
+        scrollTrigger: {
+          start: "top 50%",
+          end: "bottom 100%",
+          trigger: screen1,
+          scrub: scrubSpeed,
+        },
+      }
+    );
+    gsap.fromTo(
+      progress,
+      { opacity: 1, xPercent: 0 },
+      {
+        opacity: 0,
+        xPercent: -100,
+        scrollTrigger: {
+          start: "bottom 100%",
+          trigger: screen5,
+          scrub: scrubSpeed,
+        },
+      }
+    );
+    gsap.to(progressFill, {
+      height: "100%",
+      scrollTrigger: {
+        trigger: mid,
+        start: "top 0%",
+        end: "bottom 0%",
+        scrub: scrubSpeed,
+      },
+    });
+    gsap.utils.toArray(".progressCircle").forEach((circle, index) => {
+      gsap.from(circle, {
+        backgroundColor: "#EBEBEB",
+        scrollTrigger: {
+          trigger: `#screen${index + 1}`,
+          end: "top 39%",
+          start: "top 39%",
+          scrub: scrubSpeed,
+        },
+      });
+    });
+  </script>
+</Layout>
