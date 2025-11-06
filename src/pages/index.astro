@@ -242,10 +242,15 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
   </div>
   <div id="bottom" class="h-screen flex flex-col p-10">
     <div id="textBottom" class="w-1/2 flex-1">
-      <h2>Définis ta paire,<br />définis ton style</h2>
-      <p class="text-3xl">
-        Personnalise les lunettes qui te correspondent vraiment.
-      </p>
+      <h2 class="text-8xl">Ta paire,<br />ton style</h2>
+      <div>
+        <p id="detailMonture">Monture Plastique</p>
+        <p id="detailBranche">Branche en Noyer</p>
+        <p id="detailPont">Pont de 20mm</p>
+        <p id="detailTeinteVerre">Verres teintés Charbon</p>
+        <p id="detailTailleVerre">Verres de 50mm</p>
+        <p id="detailGravure">Aucune gravure</p>
+      </div>
     </div>
     <div id="btnBottom" class="flex flex-col gap-4 items-center">
       <div class="flex gap-2 w-1/2">
@@ -275,6 +280,14 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     let LargeurPont = 20;
     let TailleVerre = 50;
     let Gravure = "";
+
+    //details 
+    const detailMonture = document.getElementById("detailMonture");
+    const detailBranche = document.getElementById("detailBranche");
+    const detailPont = document.getElementById("detailPont");
+    const detailTeinteVerre = document.getElementById("detailTeinteVerre");
+    const detailTailleVerre = document.getElementById("detailTailleVerre");
+    const detailgravure = document.getElementById("detailgravure");
 
     //elements de glass
     const Glass = document.getElementById("glass");
@@ -313,10 +326,9 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
 
     MatMontureItems.forEach((item) => {
       item.addEventListener("click", (e) => {
-        console.log("Id de l'item : " + item.id);
         Monture.style.fill = `url(#${item.id}Monture)`;
         MatMonture = item.id;
-        console.log("MatMonture : " + MatMonture);
+        detailMonture.textContent = "Monture en "+MatMonture;
       });
     });
 
@@ -346,11 +358,10 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
 
     MatBrancheItems.forEach((item) => {
       item.addEventListener("click", (e) => {
-        console.log("Id de l'item : " + item.id);
         BrancheDroite.style.fill = `url(#${item.id}Branche)`;
         BrancheGauche.style.fill = `url(#${item.id}Branche)`;
         MatBranche = item.id;
-        console.log("MatMonture : " + MatBranche);
+        detailBranche.textContent = "Branches en "+MatBranche;
       });
     });
 
@@ -382,11 +393,10 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
 
     TeinteVerreItems.forEach((item) => {
       item.addEventListener("click", (e) => {
-        console.log("Id de l'item : " + item.id);
         VerreDroite.style.fill = item.dataset.color;
         VerreGauche.style.fill = item.dataset.color;
         TeinteVerre = item.id;
-        console.log("TeinteVerre : " + TeinteVerre);
+        detailTeinteVerre.textContent = "Verres teintés "+TeinteVerre;
       });
     });
 
@@ -394,18 +404,16 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     const SliderPont = document.getElementById("SliderPont");
 
     SliderPont.addEventListener("change", (e) => {
-      console.log("Slider value : " + SliderPont.value);
       LargeurPont = SliderPont.value;
-      console.log("LargeurPont : " + LargeurPont);
+      detailPont.textContent = "Pont de "+LargeurPont+"mm";
     });
 
     //Slider Verre________________________________________________________
     const SliderVerre = document.getElementById("SliderVerre");
 
     SliderVerre.addEventListener("change", (e) => {
-      console.log("Slider value : " + SliderVerre.value);
       TailleVerre = SliderVerre.value;
-      console.log("TailleVerre : " + TailleVerre);
+      detailTailleVerre.textContent = "Verres de "+TailleVerre+"mm";
     });
 
     //Input Gravure_______________________________________________________
@@ -413,9 +421,9 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     const GravureButton = document.getElementById("GravureButton");
 
     GravureButton.addEventListener("click", (e) => {
-      console.log("Input value : " + GravureInput.value);
       Gravure = GravureInput.value;
-      console.log("Gravure : " + GravureInput.value);
+      console.log(Gravure);
+      detailGravure.textContent = (Gravure == "" ? "Aucun gravure" : "Gravure personnalisée : "+Gravure);
     });
 
     //Sauvegarde ________________________________________________________
