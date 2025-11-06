@@ -108,7 +108,12 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
             <div id="MatMontureCarousel" class=`carousel`>
               {
                 MatMonture.map((mat) => (
-                  <img src={mat.ImageURL} alt="" class="carouselItem" />
+                  <img
+                    id={mat.Nom}
+                    src={mat.ImageURL}
+                    alt=""
+                    class="carouselItem"
+                  />
                 ))
               }
             </div>
@@ -201,27 +206,54 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");
     //const pb = new Pocketbase("http://127.0.0.1:8090");//
 
+    //Valeurs à enregistrer
+    let MatMonture = "Plastique";
+    let MatBranche = "Noyer";
+    let TeinteVerre = "Charbon";
+
+    //elements de glass
+    const Glass = document.getElementById("glass");
+    const Monture = document.getElementById("monture");
+    const BrancheDroite = document.getElementById("brancheDroite");
+    const BrancheGauche = document.getElementById("brancheGauche");
+    const VerreDroite = document.getElementById("verreDroite");
+    const VerreGauche = document.getElementById("verreGauche");
+    console.log(Monture)
+
+    //carousels Monture
     const MatMontureCarousel = document.getElementById("MatMontureCarousel");
     const MatMontureArrowLeft = document.getElementById("MatMontureArrowLeft");
     const MatMontureArrowRight = document.getElementById(
       "MatMontureArrowRight"
     );
-
+    //handle scrolling
     const scrollAmount = 96;
-
     MatMontureArrowLeft?.addEventListener("click", (e) => {
       MatMontureCarousel?.scrollBy({
         left: -scrollAmount,
         behavior: "smooth",
       });
     });
-
     MatMontureArrowRight?.addEventListener("click", (e) => {
       MatMontureCarousel?.scrollBy({
         left: scrollAmount,
         behavior: "smooth",
       });
     });
+
+    const MatMontureItems = Array.from(MatMontureCarousel?.children);
+    console.log(MatMontureItems);
+
+    MatMontureItems.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        console.log("Id de l'item : "+item.id);
+        Monture.style.fill = `url(#${item.id}Monture)`;
+        MatMonture = item.id;
+        console.log("MatMonture : "+MatMonture);
+      });
+    });
+
+
   </script>
 
   <!-- script d'animation -->
