@@ -64,6 +64,12 @@ if (!user && pb.authStore.isValid) {
   console.log("User : "+pb.authStore.record);
   console.log("Cookie : "+document.cookie);
 
+  if (pb.authStore.isValid) {
+    document.cookie = `pb_auth = ${pb.authStore.token}; path=/`;
+    console.log(document.cookie);
+    location.href = "/";
+  }
+
   //logout______________________________________________
   const logout = document.getElementById("logout");
 
