@@ -437,9 +437,34 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
         "Impossible de commander, cette fonctionnalité n'est pas disponible car ce site est un projet étudiant.";
     });
 
-    SaveButton?.addEventListener("click", (e) => {
+    SaveButton.addEventListener("click", async (e) => {
       if (!pb.authStore.isValid) {
         msg.textContent = "Tu dois être connecté pour enregistrer une paire.";
+      } else {
+        try {
+          const idBranche = await pb.collection("NomBranche").getOne(MatBranche);
+          const idMonture = await pb.collection("NomMonture").getOne(MatMonture);
+          const idVerre = await pb.collection("NomVerre").getOne(TeinteVerre);
+          console.log("idBranche : "+idBranche.identity);
+          console.log("idMonture : "+idMonture.identity);
+          console.log("idVerre : "+idVerre.identity);
+
+          await pb.collection("Lunettes").create({
+            LargeurPont: LargeurPont,
+            TailleVerre: TailleVerre,
+            Gravure: Gravure,
+            MatBranche: idBranche.identity,
+            MatMonture: idMonture.identity,
+            TeinteVerre: idVerre.identity,
+            User: pb.authStore.record.id,
+          });
+          msg.textContent = "Ta paire de lunettes a bien été enregistrée dans ta galerie";
+          return;
+        } catch (error) {
+          console.log(error);
+          msg.textContent = "Échec de l'enregistrement"
+          return error;
+        }
       }
     });
   </script>

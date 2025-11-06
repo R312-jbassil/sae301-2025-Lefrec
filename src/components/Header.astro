@@ -65,12 +65,6 @@ if (!user && pb.authStore.isValid) {
   console.log("Cookie : "+document.cookie);
   console.log("Cookie pb_auth : "+document.cookie.includes("pb_auth"));
 
-  // if (pb.authStore.isValid && !document.cookie.includes("pb_auth")) {
-  //   document.cookie = `pb_auth = ${pb.authStore.token}; path=/`;
-  //   console.log(document.cookie);
-  //   location.href = "/";
-  // }
-
   //logout______________________________________________
   const logout = document.getElementById("logout");
 
