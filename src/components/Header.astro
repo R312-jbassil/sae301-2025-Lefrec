@@ -18,10 +18,6 @@ if (!user && pb.authStore.isValid) {
   await pb.collection("users").authRefresh();
   user = pb.authStore.record;
 }
-
-console.log("IsValid : "+pb.authStore.isValid);
-console.log("token : "+token);
-console.log("user : "+user);
 ---
 
 <header
@@ -61,8 +57,14 @@ console.log("user : "+user);
 <script type="module">
   import Pocketbase from "https://cdn.jsdelivr.net/npm/pocketbase@0.26.2/dist/pocketbase.es.mjs";
   //const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");//
-const pb = new Pocketbase("http://127.0.0.1:8090");
+  const pb = new Pocketbase("http://127.0.0.1:8090");
 
+  console.log("IsValid : "+pb.authStore.isValid);
+  console.log("Token : "+pb.authStore.token);
+  console.log("User : "+pb.authStore.record);
+  console.log("Cookie : "+document.cookie);
+
+  //logout______________________________________________
   const logout = document.getElementById("logout");
 
   if (logout) {
