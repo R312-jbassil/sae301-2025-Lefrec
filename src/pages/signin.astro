@@ -5,7 +5,9 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout title="TaVue - Connexion">
   <div class="flex justify-center p-10">
-    <div class="flex flex-col gap-4 p-4 bg-base-100 rounded-2xl drop-shadow-sm w-[500px]">
+    <div
+      class="flex flex-col gap-4 p-4 bg-base-100 rounded-2xl drop-shadow-sm w-[500px]"
+    >
       <div>
         <h1 class="text-5xl">Créé ton compte maintenant !</h1>
         <p>
@@ -88,7 +90,8 @@ import Layout from "../layouts/Layout.astro";
 
   <script type="module">
     import pocketbase from "https://cdn.jsdelivr.net/npm/pocketbase@0.26.2/dist/pocketbase.es.mjs";
-    const pb = new pocketbase("https://tavue.paolo-vincent.fr/pb/");
+    //const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");//
+    const pb = new Pocketbase("http://127.0.0.1:8090");
 
     const form = document.getElementById("signinForm");
     const msg = document.getElementById("msg");

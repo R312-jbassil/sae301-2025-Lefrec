@@ -1,12 +1,27 @@
 ---
 import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
-import Down from "../assets/Down.svg";
+import Arrow from "../assets/Arrow.svg";
 import Glass from "../components/Glass.astro";
 
-let monture = "Carbone";
-let branche = "Noyer";
-let verre = "Charbon";
+import Pocketbase from "pocketbase";
+//const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");//
+const pb = new Pocketbase("http://127.0.0.1:8090");
+
+let MatMonture = await pb.collection("MatMonture").getFullList();
+MatMonture.forEach((mat) => {
+  mat.ImageURL = pb.files.getURL(mat, mat.Image, { thumb: "200x200" });
+});
+console.log(MatMonture);
+
+let MatBranche = await pb.collection("MatBranche").getFullList();
+MatBranche.forEach((mat) => {
+  mat.ImageURL = pb.files.getURL(mat, mat.Image, { thumb: "200x200" });
+});
+console.log(MatBranche);
+
+let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
+console.log(TeinteVerre);
 ---
 
 <Layout title="TaVue - Ta paire, ton style">
@@ -18,13 +33,21 @@ let verre = "Charbon";
       </p>
     </div>
     <div class="w-[50%] h-[50%] flex items-center">
-      <!-- <Glass id="glass" monture={monture} branche={branche} verre={verre} /> -->
+      <Glass
+        id="glass"
+        MatMonture={MatMonture}
+        MatBranche={MatBranche}
+        TeinteVerre={TeinteVerre}
+        monture="Carbone"
+        branche="Noyer"
+        verre="Charbon"
+      />
     </div>
     <div
       id="arrow"
       class="absolute w-[70px] h-[70px] rounded-full bg-primary flex justify-center items-center bottom-[10%] left-[50%]"
     >
-      <Down />
+      <Arrow class="fill-white" />
     </div>
   </div>
   <div id="mid" class="flex relative">
@@ -78,7 +101,19 @@ let verre = "Charbon";
             style. Élégance, légéreté ou audace, à toi de choisir.
           </p>
           <h3>Matériaux</h3>
-          <div></div>
+          <div class="flex gap-2 justify-center items-center">
+            <Arrow id="MatMontureArrowLeft" class="fill-(--color-primary) rotate-90" />
+            <div
+              class="carousel"
+            >
+              {
+                MatMonture.map((mat) => (
+                  <img src={mat.ImageURL} alt="" class="carouselItem">
+                ))
+              }
+            </div>
+            <Arrow id="MatMontureArrowRight" class="fill-(--color-primary) rotate-270" />
+          </div>
         </section>
       </div>
       <div id="screen2" class="screen justify-end">
@@ -158,6 +193,12 @@ let verre = "Charbon";
     </div>
   </div>
 
+  //script de personnalisation
+  <script>
+    
+  </script>
+
+  //script d'animation
   <script>
     import { gsap } from "gsap";
     import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -176,13 +217,6 @@ let verre = "Charbon";
     const screen3 = document.getElementById("screen3");
     const screen4 = document.getElementById("screen4");
     const screen5 = document.getElementById("screen5");
-
-    //sections
-    // const section1 = document.getElementById("section1");
-    // const section2 = document.getElementById("section2");
-    // const section3 = document.getElementById("section3");
-    // const section4 = document.getElementById("section4");
-    // const section5 = document.getElementById("section5");
 
     //other
     const arrow = document.getElementById("arrow");

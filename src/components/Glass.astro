@@ -2,29 +2,15 @@
 import "../styles/global.css";
 
 import Pocketbase from "pocketbase";
-const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");
+//const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");//
+const pb = new Pocketbase("http://127.0.0.1:8090");
 
-const { monture, branche, verre } = Astro.props;
-
-let MatMonture = await pb.collection("MatMonture").getFullList();
-MatMonture.forEach((mat) => {
-  mat.ImageURL = pb.files.getURL(mat, mat.Image, { thumb: "200x200" });
-});
-console.log(MatMonture);
-
-let MatBranche = await pb.collection("MatBranche").getFullList();
-MatBranche.forEach((mat) => {
-  mat.ImageURL = pb.files.getURL(mat, mat.Image, { thumb: "200x200" });
-});
-console.log(MatBranche);
-
-let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
-console.log(TeinteVerre);
+const { MatMonture, MatBranche, TeinteVerre, monture, branche, verre } = Astro.props;
 
 function getCouleur(Nom) {
-  const teinte = TeinteVerre.find(teinte => teinte.Nom === Nom);
+  const teinte = TeinteVerre.find((teinte) => teinte.Nom === Nom);
   return teinte.Couleur;
-};
+}
 ---
 
 <svg
@@ -119,10 +105,10 @@ function getCouleur(Nom) {
     <g id="verres" class="verre">
       <path
         d="M13.3465 50.8728C12.4665 56.9228 13.7465 88.2828 24.7865 106.183C35.8265 124.083 61.8265 127.533 66.1565 127.493C70.4865 127.453 84.6665 128.513 90.6265 118.223C95.5965 109.633 103.796 74.7428 99.7465 65.1728C93.4865 50.3528 59.3465 41.1528 59.3465 41.1528C59.3465 41.1528 32.4965 35.6928 25.5265 36.6928C25.5265 36.6928 15.5565 35.7328 13.3565 50.8628L13.3465 50.8728Z"
-      fill={getCouleur(verre)}></path>
+        fill={getCouleur(verre)}></path>
       <path
         d="M144.346 80.5428C144.346 80.5428 143.256 70.9928 163.916 63.8528C175.676 59.7928 224.376 67.0828 224.376 67.0828C224.376 67.0828 243.466 71.1428 246.086 75.3628C248.706 79.5828 255.546 92.6028 254.376 113.333C253.236 133.543 247.066 140.133 241.766 143.643C241.766 143.643 234.666 148.573 220.426 149.573C193.776 151.453 183.416 148.433 174.236 141.843C144.356 120.383 144.356 80.5428 144.356 80.5428H144.346Z"
-      fill={getCouleur(verre)}></path>
+        fill={getCouleur(verre)}></path>
     </g>
   </g>
 </svg>

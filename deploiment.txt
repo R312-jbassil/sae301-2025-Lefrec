@@ -1,0 +1,5 @@
+URL application : https://tavue.paolo-vincent.fr
+URL repository GitHub : https://github.com/R312-jbassil/sae301-2025-Lefrec
+Login admin pocketbase :
+-paolo.vincent@edu.univ-fcomte.fr
+-totototototo

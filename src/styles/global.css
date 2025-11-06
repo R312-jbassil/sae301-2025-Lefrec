@@ -82,4 +82,10 @@
     .progressCircle {
         @apply flex justify-center items-center text-primary-content bg-primary w-10 h-10 rounded-full;
     }
+    .carousel {
+        @apply flex grow h-full gap-4 px-4 overflow-x-auto;
+    }
+    .carouselItem {
+        @apply w-24 h-24 rounded-xl;
+    }
 }
