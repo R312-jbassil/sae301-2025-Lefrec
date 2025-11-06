@@ -100,7 +100,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
             définit sa forme globale. Sélectionne le matériau qui reflète ton
             style. Élégance, légéreté ou audace, à toi de choisir.
           </p>
-          <h3>Matériaux</h3>
+          <h3>Matériau</h3>
           <div class="flex gap-2 justify-center items-center">
             <div id="MatMontureArrowLeft" class="carouselArrow">
               <Arrow class="fill-(--color-primary) origin-center rotate-90" />
@@ -130,8 +130,27 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
             Ajuste le matériau des branches de ta paire pour créer un contraste
             unique ou une harmonie parfaite.
           </p>
-          <h3>Matériaux</h3>
-          <div></div>
+          <h3>Matériau</h3>
+          <div class="flex gap-2 justify-center items-center">
+            <div id="MatBrancheArrowLeft" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) origin-center rotate-90" />
+            </div>
+            <div id="MatBrancheCarousel" class=`carousel`>
+              {
+                MatBranche.map((mat) => (
+                  <img
+                    id={mat.Nom}
+                    src={mat.ImageURL}
+                    alt=""
+                    class="carouselItem"
+                  />
+                ))
+              }
+            </div>
+            <div id="MatBrancheArrowRight" class="carouselArrow">
+              <Arrow class="fill-(--color-primary) rotate-270" />
+            </div>
+          </div>
         </section>
       </div>
       <div id="screen3" class="screen justify-end">
@@ -220,7 +239,8 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     const VerreGauche = document.getElementById("verreGauche");
     console.log(Monture)
 
-    //carousels Monture
+    //carousels Monture_______________________________________________________
+
     const MatMontureCarousel = document.getElementById("MatMontureCarousel");
     const MatMontureArrowLeft = document.getElementById("MatMontureArrowLeft");
     const MatMontureArrowRight = document.getElementById(
@@ -253,7 +273,39 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
       });
     });
 
+    //carousels branche_______________________________________________________
 
+    const MatBrancheCarousel = document.getElementById("MatBrancheCarousel");
+    const MatBrancheArrowLeft = document.getElementById("MatBrancheArrowLeft");
+    const MatBrancheArrowRight = document.getElementById(
+      "MatBrancheArrowRight"
+    );
+    //handle scrolling
+    MatBrancheArrowLeft?.addEventListener("click", (e) => {
+      MatBrancheCarousel?.scrollBy({
+        left: -scrollAmount,
+        behavior: "smooth",
+      });
+    });
+    MatBrancheArrowRight?.addEventListener("click", (e) => {
+      MatBrancheCarousel?.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    });
+
+    const MatBrancheItems = Array.from(MatBrancheCarousel?.children);
+    console.log(MatBrancheItems);
+
+    MatBrancheItems.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        console.log("Id de l'item : "+item.id);
+        BrancheDroite.style.fill = `url(#${item.id}Branche)`;
+        BrancheGauche.style.fill = `url(#${item.id}Branche)`;
+        MatBranche = item.id;
+        console.log("MatMonture : "+MatBranche);
+      });
+    });
   </script>
 
   <!-- script d'animation -->
