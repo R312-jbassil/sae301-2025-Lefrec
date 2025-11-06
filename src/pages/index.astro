@@ -226,7 +226,10 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
             Une gravure qui rend ta paire unique.
           </p>
           <h3>Gravure personnalisé</h3>
-          <div></div>
+          <div class="flex w-full gap-2 py-2 justify-center">
+            <input id="GravureInput" type="text" placeholder="Ton texte personnalisé" class="input" />
+            <button id="GravureButton" class="btn btn-primary">Appliquer</button>
+          </div>
         </section>
       </div>
     </div>
@@ -262,6 +265,7 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     let TeinteVerre = "Charbon";
     let LargeurPont = 20;
     let TailleVerre = 50;
+    let Gravure = "";
 
     //elements de glass
     const Glass = document.getElementById("glass");
@@ -394,8 +398,18 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
       TailleVerre = SliderVerre.value;
       console.log("TailleVerre : " + TailleVerre);
     });
+
+
+    //Input Gravure_______________________________________________________
+    const GravureInput = document.getElementById("GravureInput");
+    const GravureButton = document.getElementById("GravureButton");
+
+    GravureButton.addEventListener("click", (e) => {
+      console.log("Input value : "+GravureInput.value);
+      Gravure = GravureInput.value;
+      console.log("Gravure : "+GravureInput.value);
+    })
   </script>
-  
 
   <!-- script d'animation -->
   <script>
