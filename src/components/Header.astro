@@ -3,8 +3,8 @@ import "../styles/global.css";
 import Exit from "../assets/exit.svg";
 
 import Pocketbase from "pocketbase";
-//const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");//
-const pb = new Pocketbase("http://127.0.0.1:8090");
+const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");//
+// const pb = new Pocketbase("http://127.0.0.1:8090");
 
 let token = Astro.cookies.get("pb_auth")?.value;
 
@@ -54,7 +54,7 @@ if (!user && pb.authStore.isValid) {
   </div>
 </header>
 
-<script type="module">
+<script>
   import Pocketbase from "https://cdn.jsdelivr.net/npm/pocketbase@0.26.2/dist/pocketbase.es.mjs";
   //const pb = new Pocketbase("https://tavue.paolo-vincent.fr/pb/");//
   const pb = new Pocketbase("http://127.0.0.1:8090");
@@ -63,12 +63,13 @@ if (!user && pb.authStore.isValid) {
   console.log("Token : "+pb.authStore.token);
   console.log("User : "+pb.authStore.record);
   console.log("Cookie : "+document.cookie);
+  console.log("Cookie pb_auth : "+document.cookie.includes("pb_auth"));
 
-  if (pb.authStore.isValid) {
-    document.cookie = `pb_auth = ${pb.authStore.token}; path=/`;
-    console.log(document.cookie);
-    location.href = "/";
-  }
+  // if (pb.authStore.isValid && !document.cookie.includes("pb_auth")) {
+  //   document.cookie = `pb_auth = ${pb.authStore.token}; path=/`;
+  //   console.log(document.cookie);
+  //   location.href = "/";
+  // }
 
   //logout______________________________________________
   const logout = document.getElementById("logout");
