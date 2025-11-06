@@ -476,7 +476,6 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
         end: "bottom 100%",
         trigger: screen1,
         scrub: true,
-        markers: true,
       },
     });
     gsap.fromTo(
@@ -491,7 +490,6 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
           end: "bottom 100%",
           trigger: screen2,
           scrub: true,
-          markers: true,
         },
       }
     );
@@ -613,24 +611,35 @@ let TeinteVerre = await pb.collection("TeinteVerre").getFullList();
     });
 
     //progress slide in/out
-    gsap.from(progress, {
-      opacity: 0,
-      xPercent: -100,
-      scrollTrigger: {
-        end: "bottom 100%",
-        trigger: screen1,
-        scrub: scrubSpeed,
-      },
-    });
-    gsap.to(progress, {
-      opacity: 0,
-      xPercent: -100,
-      scrollTrigger: {
-        start: "bottom 100%",
-        trigger: screen5,
-        scrub: scrubSpeed,
-      },
-    });
+    gsap.fromTo(
+      progress,
+      { opacity: 0, xPercent: -100 },
+      {
+        opacity: 1,
+        xPercent: 0,
+        scrollTrigger: {
+          start: "top 50%",
+          end: "bottom 100%",
+          trigger: screen1,
+          scrub: scrubSpeed,
+          markers: true,
+        },
+      }
+    );
+    gsap.fromTo(
+      progress,
+      { opacity: 1, xPercent: 0 },
+      {
+        opacity: 0,
+        xPercent: -100,
+        scrollTrigger: {
+          start: "bottom 100%",
+          trigger: screen5,
+          scrub: scrubSpeed,
+          markers : true,
+        },
+      }
+    );
     gsap.to(progressFill, {
       height: "100%",
       scrollTrigger: {
